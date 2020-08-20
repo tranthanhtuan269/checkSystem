@@ -1,1 +1,1 @@
-Chào bạn Tuấn
+Hệ thống {{ $system }} đang bị lỗi

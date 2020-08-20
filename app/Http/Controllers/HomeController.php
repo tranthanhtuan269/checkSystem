@@ -12,7 +12,22 @@ class HomeController extends Controller
         $websites = Website::get();
 
         foreach($websites as $website){
-            $website->status = Helper::http_response($website->link);
+            if(Helper::http_response($website->link) == 1){
+                $website->status = 1;
+            }else{
+                $website->status = 0;
+
+                $title = 'test';
+                $email = 'tuantt@tohsoft.com';
+                $content = 'Hệ thống '. $website->name .' đang lỗi';
+                $content_mail = ['system' => $website->name];
+
+                \Mail::send('content-email', $content_mail, function ($message) use ($email, $title, $content) {
+                    $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
+                    $message->to($email)->subject($content);
+                });
+            }
+            
             $website->save();
         }
 
@@ -60,14 +75,15 @@ class HomeController extends Controller
     }
 
     public function testSendMail(){
-        dd(env('MAIL_USERNAME'));
         try {
             $title = 'test';
             $email = 'tuantt@tohsoft.com';
-            $content_mail = [];
-            \Mail::send('content-email', $content_mail, function ($message) use ($email, $title) {
-                $message->from(env('MAIL_USERNAME'), 'Tohsoft.com');
-                $message->to($email)->subject( 'Test send mail' );
+            $content = 'Hệ thống xxx đang lỗi';
+            $content_mail = ['system' => 'xxx2'];
+
+            \Mail::send('content-email', $content_mail, function ($message) use ($email, $title, $content) {
+                $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
+                $message->to($email)->subject($content);
             });
         } catch (\Exception $e) {
         }

@@ -43,13 +43,10 @@ class Helper
         return FALSE;
     }
 
-	public function testSendMail($title, $email, $content_email=[]){
-        try {
-            \Mail::send('content-email', $content_mail, function ($message) use ($email, $title) {
-                $message->from(env('MAIL_USERNAME'), 'Tohsoft.com');
-                $message->to($email)->subject( 'Test send mail' );
-            });
-        } catch (\Exception $e) {
-        }
+	public static function SendMail($title, $email, $content, $content_email=[]){
+        \Mail::send('content-email', $content_mail, function ($message) use ($email, $title, $content) {
+            $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
+            $message->to($email)->subject($content);
+        });
     }
 }
