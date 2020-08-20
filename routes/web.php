@@ -17,3 +17,4 @@ Route::get('/', 'HomeController@index');
 Route::post('/remove-website', 'HomeController@removeWeb');
 Route::post('/add-website', 'HomeController@addWeb');
 Route::get('/test', 'HomeController@test');
+Route::get('/test-send-mail', 'HomeController@testSendMail');

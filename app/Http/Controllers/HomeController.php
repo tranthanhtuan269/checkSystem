@@ -58,4 +58,17 @@ class HomeController extends Controller
        
         \Mail::to('tran.thanh.tuan269@gmail.com')->send(new \App\Mail\MyTestMail($details));
     }
+
+    public function testSendMail(){
+        try {
+            $title = 'test';
+            $email = 'congnd@tohsoft.com';
+            $content_mail = [];
+            \Mail::send('content-email', $content_mail, function ($message) use ($email, $title) {
+                $message->from(env('MAIL_USERNAME'), 'Tohsoft.com');
+                $message->to($email)->subject( 'Test send mail' );
+            });
+        } catch (\Exception $e) {
+        }
+    }
 }
