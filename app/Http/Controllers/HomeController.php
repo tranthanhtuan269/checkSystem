@@ -18,22 +18,17 @@ class HomeController extends Controller
                 $website->status = 1;
             }else{
                 $website->status = 0;
-
-                // $title = 'test';
-                // $email = $obj_email->email;
-                // $content = 'Hệ thống '. $website->name .' đang lỗi';
-                // $content_mail = ['system' => $website->name];
-
-                // \Mail::send('content-email', $content_mail, function ($message) use ($email, $title, $content) {
-                //     $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
-                //     $message->to($email)->subject($content);
-                // });
             }
             
             $website->save();
         }
 
     	return view('home', ['email' => $obj_email, 'websites' => $websites]);
+    }
+
+    public function emails(){
+        $emails = Email::get();
+    	return view('email', ['emails' => $emails]);
     }
 
     public function addWeb(Request $request){
@@ -55,14 +50,55 @@ class HomeController extends Controller
         ]);
     }
 
-    public function updateEmail(Request $request){
-        $email = Email::first();
+    public function addEmail(Request $request){
+        $email = new Email;
         $email->email = $request->email;
         $email->save();
 
         return response()->json([
             'message' => 'OK',
             'status' => '201',
+            'id' => $email->id,
+            'email' => $email->email,
+        ]);
+    }
+
+    public function updateEmail(Request $request){
+        $email = Email::find($request->id);
+        if($email){
+            $email->email = $request->email;
+            $email->save();
+        }
+
+        return response()->json([
+            'message' => 'OK',
+            'status' => '201',
+        ]);
+    }
+
+    public function updateWebsite(Request $request){
+        $website = Website::find($request->id);
+        if($website){
+            $website->name = $request->name;
+            $website->link = $request->link;
+            $website->save();
+        }
+
+        return response()->json([
+            'message' => 'OK',
+            'status' => '201',
+        ]);
+    }
+
+    public function removeEmail(Request $request){
+        $email = Email::find($request->id);
+        if($email){
+            $email->delete();
+        }
+
+        return response()->json([
+            'message' => 'OK',
+            'status' => '200',
         ]);
     }
 

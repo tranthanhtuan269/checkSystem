@@ -22,41 +22,29 @@
       <div class="row">
         <div class="col-md-12 float-right text-right my-2">
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModel">
-            <i class="fa fa-plus-square" aria-hidden="true"></i> Thêm mới website
+            <i class="fa fa-plus-square" aria-hidden="true"></i> Thêm mới email
           </button>
         </div>
         <div class="col-md-3">
         <ul class="list-group">
-          <li class="list-group-item active">Quản lý website</li>
-          <li class="list-group-item"><a href="{{ url('/emails') }}">Quản lý Email</a></li>
+          <li class="list-group-item"><a href="{{ url('/') }}">Quản lý website</a></li>
+          <li class="list-group-item active">Quản lý email</li>
         </ul>
         </div>
         <div class="col-md-9">
           <div class="row">
             <div class="col-md-12">
-              <ul class="list-group list-website">
-                @foreach($websites as $website)
-                  @if($website->status == 1)
-                  <li class="list-group-item list-group-item-success item-{{ $website->id }}">
-                    <a id="website-{{ $website->id }}" href="{{ $website->link }}">{{ $website->name }}</a>
-                    <button type="button" class="btn btn-danger float-right remove-btn" data-id="{{ $website->id }}">
+              <ul class="list-group list-email">
+                @foreach($emails as $email)
+                  <li class="list-group-item list-group-item-success item-{{ $email->id }}">
+                    <span id="email-{{ $email->id }}">{{ $email->email }}</span>
+                    <button type="button" class="btn btn-danger float-right remove-btn" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
                       <i class="fa fa-times" aria-hidden="true"></i> Xóa
                     </button>
-                    <button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="{{ $website->id }}">
+                    <button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
                       <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
                     </button>
                   </li>
-                  @else
-                  <li class="list-group-item list-group-item-danger item-{{ $website->id }}">
-                    <a id="website-{{ $website->id }}" href="{{ $website->link }}">{{ $website->name }}</a>
-                    <button type="button" class="btn btn-danger float-right remove-btn" data-id="{{ $website->id }}">
-                      <i class="fa fa-times" aria-hidden="true"></i> Xóa
-                    </button>
-                    <button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="{{ $website->id }}">
-                      <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
-                    </button>
-                  </li>
-                  @endif
                 @endforeach
               </ul>
             </div>
@@ -70,7 +58,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header text-center">
-          <h5 class="modal-title" id="exampleModalLabel">Thêm mới website</h5>
+            <h5 class="modal-title" id="emailModelLabel">Thêm mới email nhận thông báo</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -78,15 +66,9 @@
           <div class="modal-body">
             <form>
               <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
+                <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
-                  <input type="text" name="name" class="form-control" id="nametxt" value="">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Link</label>
-                <div class="col-sm-10">
-                  <input type="text" name="link" class="form-control" id="linktxt" value="">
+                  <input type="text" name="email" class="form-control" id="emailtxt" value="">
                 </div>
               </div>
             </form>
@@ -104,7 +86,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header text-center">
-            <h5 class="modal-title" id="exampleModalLabel">Sửa website</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Sửa email nhận thông báo</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -112,15 +94,9 @@
           <div class="modal-body">
             <form>
               <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
+                <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
-                  <input type="text" name="name" class="form-control" id="edtnametxt" value="">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Link</label>
-                <div class="col-sm-10">
-                  <input type="text" name="link" class="form-control" id="edtlinktxt" value="">
+                  <input type="text" name="email" class="form-control" id="edtemailtxt" value="">
                 </div>
               </div>
             </form>
@@ -132,6 +108,8 @@
         </div>
       </div>
     </div>
+
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -145,8 +123,7 @@
         function action(){
           $('.edit-btn').off('click');
           $('.edit-btn').click(function(){
-            $('#edtnametxt').val($('#website-' + $(this).attr('data-id')).text());
-            $('#edtlinktxt').val($('#website-' + $(this).attr('data-id')).attr('href'));
+            $('#edtemailtxt').val($('#email-' + $(this).attr('data-id')).text());
             $('#update-btn').attr('data-id', $(this).attr('data-id'));
             $('#editModal').modal('toggle')
           })
@@ -163,7 +140,7 @@
             });
 
             var request = $.ajax({
-              url: "{{ url('/') }}/remove-website",
+              url: "{{ url('/') }}/remove-email",
               method: "POST",
               data: { id : object_id },
               dataType: "json"
@@ -181,8 +158,7 @@
                 
         $('#update-btn').click(function(){
           var object_id = $('#update-btn').attr('data-id');
-          var object_name = $('#edtnametxt').val();
-          var object_link = $('#edtlinktxt').val();
+          var object_email = $('#edtemailtxt').val();
 
           $.ajaxSetup({
               headers: {
@@ -191,22 +167,19 @@
           });
 
           var request = $.ajax({
-            url: "{{ url('/') }}/update-website",
+            url: "{{ url('/') }}/update-email",
             method: "POST",
             data: { 
               id : object_id,
-              name : object_name,
-              link : object_link,
+              email : object_email,
             },
             dataType: "json"
           });
           
           request.done(function( msg ) {
-            $('#emailModel').modal('toggle')
-            swal("Tuyệt!", "Website đã được cập nhật!", "success");
-            $('#editModal').modal('toggle')
-            $('#website-' + object_id).text(object_name);
-            $('#website-' + object_id).attr('href', object_link);
+            swal("Tuyệt!", "Email đã được cập nhật!", "success");
+            $('#editModal').modal('toggle');
+            $('#email-' + object_id).text(object_email);
           });
           
           request.fail(function( jqXHR, textStatus ) {
@@ -216,16 +189,10 @@
 
         
         $('#save-btn').click(function(){
-          var object_name = $('#nametxt').val();
-          var object_link = $('#linktxt').val();
+          var object_email = $('#emailtxt').val();
 
-          if(object_name.length == 0){
-            swal("Ồ!", "Tên website không được để trống!", "error");
-            return false;
-          }
-
-          if(object_link.length == 0){
-            swal("Ồ!", "Link website không được để trống!", "error");
+          if(object_email.length == 0){
+            swal("Ồ!", "Email không được để trống!", "error");
             return false;
           }
 
@@ -236,11 +203,10 @@
           });
 
           var request = $.ajax({
-            url: "{{ url('/') }}/add-website",
+            url: "{{ url('/') }}/add-email",
             method: "POST",
             data: { 
-              name : object_name,
-              link : object_link,
+              email : object_email,
             },
             dataType: "json"
           });
@@ -248,25 +214,20 @@
           request.done(function( msg ) {
             var obj = msg;
             if(obj.message == "OK"){
-              $html = '';
-              if(obj.status_website == 1){
-                $html = '<li class="list-group-item list-group-item-success">';
-              }else{
-                $html = '<li class="list-group-item list-group-item-danger">';
-              }
-              $html += '<a href="'+object_link+'">'+object_name+'</a>';
-              $html += '<button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="'+obj.id_website+'">';
-              $html += '<i class="fa fa-pencil" aria-hidden="true"></i> Sửa';
-              $html += '</button>';
-              $html += '<button type="button" class="btn btn-danger float-right remove-btn" data-id="'+obj.id_website+'">';
+              $html = '<li class="list-group-item list-group-item-success">';
+              $html += '<span id="email-'+obj.id+'">'+ obj.email + '</span>';
+              $html += '<button type="button" class="btn btn-danger float-right remove-btn" data-id="'+obj.id+'">';
               $html += '<i class="fa fa-times" aria-hidden="true"></i> Xóa';
+              $html += '</button>';
+              $html += '<button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="'+obj.id+'" data-toggle="modal" data-target="#editModel">';
+              $html += '<i class="fa fa-pencil" aria-hidden="true"></i> Sửa';
               $html += '</button>';
               $html += '</li>';
             }
-            $('.list-website').append($html);
-            $('#nametxt').val('')
-            $('#linktxt').val('')
-            $('#exampleModal').modal('toggle')
+            $('.list-email').append($html);
+            $('#emailtxt').val('');
+            $('#createModel').modal('toggle');
+            action();
           });
           
           request.fail(function( jqXHR, textStatus ) {
