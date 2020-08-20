@@ -46,6 +46,8 @@ class HomeController extends Controller
             'message' => 'OK',
             'status' => '201',
             'id_website' => $website->id,
+            'name_website' => $website->name,
+            'link_website' => $website->link,
             'status_website' => $website->status,
         ]);
     }
@@ -112,29 +114,5 @@ class HomeController extends Controller
             'message' => 'OK',
             'status' => '200',
         ]);
-    }
-
-    public function test(){
-        $details = [
-            'title' => 'Mail from ItSolutionStuff.com',
-            'body' => 'This is for testing email using smtp'
-        ];
-       
-        \Mail::to('tran.thanh.tuan269@gmail.com')->send(new \App\Mail\MyTestMail($details));
-    }
-
-    public function testSendMail(){
-        try {
-            $title = 'test';
-            $emails = Email::where('id' ,'>' ,0)->pluck('email')->toArray();
-            $content = 'Hệ thống xxx đang lỗi';
-            $content_mail = ['system' => 'xxx2'];
-
-            \Mail::send('content-email', $content_mail, function ($message) use ($emails, $title, $content) {
-                $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
-                $message->to($emails)->subject($content);
-            });
-        } catch (\Exception $e) {
-        }
     }
 }

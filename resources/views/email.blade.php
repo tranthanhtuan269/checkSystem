@@ -131,27 +131,37 @@
           $('.remove-btn').off('click');
           $('.remove-btn').click(function(){
             var self = $(this);
-            var object_id = $(this).attr('data-id');
-            
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+            swal({
+              title: "Bạn có chắc chắn muốn xóa Email này?",
+              text: "Nếu bạn xóa, bạn sẽ không thể phục hồi nó!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willDelete) => {
+              if (willDelete) {
+                var object_id = $(this).attr('data-id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-            var request = $.ajax({
-              url: "{{ url('/') }}/remove-email",
-              method: "POST",
-              data: { id : object_id },
-              dataType: "json"
-            });
-            
-            request.done(function( msg ) {
-              self.parent().remove();
-            });
-            
-            request.fail(function( jqXHR, textStatus ) {
-              alert( "Request failed: " + textStatus );
+                var request = $.ajax({
+                  url: "{{ url('/') }}/remove-email",
+                  method: "POST",
+                  data: { id : object_id },
+                  dataType: "json"
+                });
+                
+                request.done(function( msg ) {
+                  self.parent().remove();
+                });
+                
+                request.fail(function( jqXHR, textStatus ) {
+                  alert( "Request failed: " + textStatus );
+                });
+              }
             });
           })
         }

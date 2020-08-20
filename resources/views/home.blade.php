@@ -154,27 +154,38 @@
           $('.remove-btn').off('click');
           $('.remove-btn').click(function(){
             var self = $(this);
-            var object_id = $(this).attr('data-id');
-            
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
 
-            var request = $.ajax({
-              url: "{{ url('/') }}/remove-website",
-              method: "POST",
-              data: { id : object_id },
-              dataType: "json"
-            });
-            
-            request.done(function( msg ) {
-              self.parent().remove();
-            });
-            
-            request.fail(function( jqXHR, textStatus ) {
-              alert( "Request failed: " + textStatus );
+            swal({
+              title: "Bạn có chắc chắn muốn xóa Website này?",
+              text: "Nếu bạn xóa, bạn sẽ không thể phục hồi nó!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willDelete) => {
+              if (willDelete) {
+                var object_id = $(this).attr('data-id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                var request = $.ajax({
+                  url: "{{ url('/') }}/remove-website",
+                  method: "POST",
+                  data: { id : object_id },
+                  dataType: "json"
+                });
+                
+                request.done(function( msg ) {
+                  self.parent().remove();
+                });
+                
+                request.fail(function( jqXHR, textStatus ) {
+                  alert( "Request failed: " + textStatus );
+                });
+              }
             });
           })
         }
@@ -250,23 +261,24 @@
             if(obj.message == "OK"){
               $html = '';
               if(obj.status_website == 1){
-                $html = '<li class="list-group-item list-group-item-success">';
+                $html = '<li class="list-group-item list-group-item-success item-'+obj.id_website+'">';
               }else{
-                $html = '<li class="list-group-item list-group-item-danger">';
+                $html = '<li class="list-group-item list-group-item-danger item-'+obj.id_website+'">';
               }
-              $html += '<a href="'+object_link+'">'+object_name+'</a>';
-              $html += '<button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="'+obj.id_website+'">';
-              $html += '<i class="fa fa-pencil" aria-hidden="true"></i> Sửa';
-              $html += '</button>';
+              $html += '<a id="website-'+obj.id_website+'" href="'+obj.link_website+'">'+obj.name_website+'</a>';
               $html += '<button type="button" class="btn btn-danger float-right remove-btn" data-id="'+obj.id_website+'">';
               $html += '<i class="fa fa-times" aria-hidden="true"></i> Xóa';
+              $html += '</button>';
+              $html += '<button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="'+obj.id_website+'">';
+              $html += '<i class="fa fa-pencil" aria-hidden="true"></i> Sửa';
               $html += '</button>';
               $html += '</li>';
             }
             $('.list-website').append($html);
-            $('#nametxt').val('')
-            $('#linktxt').val('')
-            $('#exampleModal').modal('toggle')
+            $('#nametxt').val('');
+            $('#linktxt').val('');
+            $('#createModel').modal('toggle');
+            action();
           });
           
           request.fail(function( jqXHR, textStatus ) {
