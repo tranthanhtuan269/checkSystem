@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Email;
 use App\Website;
 use App\Helper\Helper;
 
@@ -10,6 +11,7 @@ class HomeController extends Controller
 {
     public function index(){
         $websites = Website::get();
+        $obj_email = Email::first();
 
         foreach($websites as $website){
             if(Helper::http_response($website->link) == 1){
@@ -17,21 +19,21 @@ class HomeController extends Controller
             }else{
                 $website->status = 0;
 
-                $title = 'test';
-                $email = 'tuantt@tohsoft.com';
-                $content = 'Hệ thống '. $website->name .' đang lỗi';
-                $content_mail = ['system' => $website->name];
+                // $title = 'test';
+                // $email = $obj_email->email;
+                // $content = 'Hệ thống '. $website->name .' đang lỗi';
+                // $content_mail = ['system' => $website->name];
 
-                \Mail::send('content-email', $content_mail, function ($message) use ($email, $title, $content) {
-                    $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
-                    $message->to($email)->subject($content);
-                });
+                // \Mail::send('content-email', $content_mail, function ($message) use ($email, $title, $content) {
+                //     $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
+                //     $message->to($email)->subject($content);
+                // });
             }
             
             $website->save();
         }
 
-    	return view('home', ['websites' => $websites]);
+    	return view('home', ['email' => $obj_email, 'websites' => $websites]);
     }
 
     public function addWeb(Request $request){
@@ -50,6 +52,17 @@ class HomeController extends Controller
             'status' => '201',
             'id_website' => $website->id,
             'status_website' => $website->status,
+        ]);
+    }
+
+    public function updateEmail(Request $request){
+        $email = Email::first();
+        $email->email = $request->email;
+        $email->save();
+
+        return response()->json([
+            'message' => 'OK',
+            'status' => '201',
         ]);
     }
 

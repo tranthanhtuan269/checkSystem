@@ -136,22 +136,16 @@
           <div class="modal-body">
             <form>
               <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
+                <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
-                  <input type="text" name="name" class="form-control" id="nametxt" value="">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Link</label>
-                <div class="col-sm-10">
-                  <input type="text" name="link" class="form-control" id="linktxt" value="">
+                  <input type="text" name="email" class="form-control" id="emailtxt" value="{{ $email->email }}">
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="save-btn">Save</button>
+            <button type="button" class="btn btn-primary" id="update-btn">Save</button>
           </div>
         </div>
       </div>
@@ -194,6 +188,7 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="{{ url('/') }}/js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script>
@@ -217,6 +212,37 @@
           
           request.done(function( msg ) {
             self.parent().remove();
+          });
+          
+          request.fail(function( jqXHR, textStatus ) {
+            alert( "Request failed: " + textStatus );
+          });
+        })
+
+                
+        $('#update-btn').click(function(){
+          document.getElementById("myNav").style.display = "block";
+
+          var object_email = $('#emailtxt').val();
+
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+
+          var request = $.ajax({
+            url: "{{ url('/') }}/update-email",
+            method: "POST",
+            data: { 
+              email : object_email,
+            },
+            dataType: "json"
+          });
+          
+          request.done(function( msg ) {
+            $('#emailModel').modal('toggle')
+            swal("Good job!", "Email has been updated!", "success");
           });
           
           request.fail(function( jqXHR, textStatus ) {

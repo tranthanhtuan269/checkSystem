@@ -16,5 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'HomeController@index');
 Route::post('/remove-website', 'HomeController@removeWeb');
 Route::post('/add-website', 'HomeController@addWeb');
+Route::post('/update-email', 'HomeController@updateEmail');
 Route::get('/test', 'HomeController@test');
 Route::get('/test-send-mail', 'HomeController@testSendMail');
