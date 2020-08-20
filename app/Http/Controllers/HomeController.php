@@ -90,7 +90,7 @@ class HomeController extends Controller
     public function testSendMail(){
         try {
             $title = 'test';
-            $emails = ['tuantt@tohsoft.com', 'tran.thanh.tuan269@gmail.com'];
+            $emails = Email::where('id' ,'>' ,0)->pluck('email')->toArray();
             $content = 'Hệ thống xxx đang lỗi';
             $content_mail = ['system' => 'xxx2'];
 
