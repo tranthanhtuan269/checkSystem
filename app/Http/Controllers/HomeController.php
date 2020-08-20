@@ -90,13 +90,13 @@ class HomeController extends Controller
     public function testSendMail(){
         try {
             $title = 'test';
-            $email = 'tuantt@tohsoft.com';
+            $emails = ['tuantt@tohsoft.com', 'tran.thanh.tuan269@gmail.com'];
             $content = 'Hệ thống xxx đang lỗi';
             $content_mail = ['system' => 'xxx2'];
 
-            \Mail::send('content-email', $content_mail, function ($message) use ($email, $title, $content) {
+            \Mail::send('content-email', $content_mail, function ($message) use ($emails, $title, $content) {
                 $message->from('tohweb@tohsoft.com', 'Tohsoft.com');
-                $message->to($email)->subject($content);
+                $message->to($emails)->subject($content);
             });
         } catch (\Exception $e) {
         }
