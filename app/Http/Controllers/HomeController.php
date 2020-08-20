@@ -60,9 +60,10 @@ class HomeController extends Controller
     }
 
     public function testSendMail(){
+        dd(env('MAIL_USERNAME'));
         try {
             $title = 'test';
-            $email = 'congnd@tohsoft.com';
+            $email = 'tuantt@tohsoft.com';
             $content_mail = [];
             \Mail::send('content-email', $content_mail, function ($message) use ($email, $title) {
                 $message->from(env('MAIL_USERNAME'), 'Tohsoft.com');

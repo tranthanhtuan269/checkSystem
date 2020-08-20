@@ -43,27 +43,13 @@ class Helper
         return FALSE;
     }
 
-	public static function send_mail($email, $content_mail, $title, $template) {
-		$yandex = [
-			'driver' => env('MAIL_DRIVER'),
-			'host' => env('MAIL_HOST'),
-			'port' => env('MAIL_PORT'),
-			'username' => env('MAIL_USERNAME'),
-			'password' => env('MAIL_PASSWORD'),
-			'encryption' => env('MAIL_ENCRYPTION'),
-		];
-		$is_toh_email = ($email && mb_stripos($email, '@tohsoft.com') !== FALSE) ? TRUE : FALSE;
-		if(!$is_toh_email){
-			try {
-				\Config::set('mail', $yandex);
-				\Mail::send($template, $content_mail, function($message) use ($email, $title) {
-					$message->from(env('MAIL_USERNAME'), 'TOH');
-					$message->to($email)->subject($title);
-				});
-				$send_done = true;
-			}catch(\Exception $e){
-
-            }
-		}
+	public function testSendMail($title, $email, $content_email=[]){
+        try {
+            \Mail::send('content-email', $content_mail, function ($message) use ($email, $title) {
+                $message->from(env('MAIL_USERNAME'), 'Tohsoft.com');
+                $message->to($email)->subject( 'Test send mail' );
+            });
+        } catch (\Exception $e) {
+        }
     }
 }
