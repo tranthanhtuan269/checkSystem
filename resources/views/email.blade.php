@@ -29,6 +29,7 @@
         <ul class="list-group">
           <li class="list-group-item"><a href="{{ url('/') }}">Quản lý website</a></li>
           <li class="list-group-item active">Quản lý email</li>
+          <li class="list-group-item"><a href="{{ url('/settings') }}">Quản lý Cấu hình</a></li>
         </ul>
         </div>
         <div class="col-md-9">

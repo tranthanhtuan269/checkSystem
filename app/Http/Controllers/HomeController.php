@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Email;
+use App\Config;
 use App\Website;
 use App\Helper\Helper;
 
@@ -29,6 +30,10 @@ class HomeController extends Controller
     public function emails(){
         $emails = Email::get();
     	return view('email', ['emails' => $emails]);
+    }
+
+    public function settings(){
+        return view('settings');
     }
 
     public function addWeb(Request $request){
@@ -78,6 +83,19 @@ class HomeController extends Controller
         ]);
     }
 
+    public function saveConfig(Request $request){
+        $config = Config::where('key', 'interval')->first();
+        if($config){
+            $config->value = $request->setting;
+            $config->save();
+        }
+
+        return response()->json([
+            'message' => 'OK',
+            'status' => '201',
+        ]);
+    }
+
     public function updateWebsite(Request $request){
         $website = Website::find($request->id);
         if($website){
@@ -114,5 +132,69 @@ class HomeController extends Controller
             'message' => 'OK',
             'status' => '200',
         ]);
+    }
+
+    public function test(){
+        $config = Config::where('key', 'interval')->first();
+
+        if($config){
+            $diff_time=strtotime(date("Y/m/d H:i:s"))-strtotime($config->updated_at);
+            switch ($config->value) {
+                case '1':
+                    if($diff_time % 60 == 0){
+                        
+                    }
+                    break;
+                case '2':
+                    if($diff_time % 300 == 0){
+                        
+                    }
+                    break;
+                case '3':
+                    if($diff_time % 600 == 0){
+                        
+                    }
+                    break;
+                case '4':
+                    if($diff_time % 900 == 0){
+                        
+                    }
+                    break;
+                case '5':
+                    if($diff_time % 1800 == 0){
+                        
+                    }
+                    break;
+                case '6':
+                    if($diff_time % 3600 == 0){
+                        
+                    }
+                    break;
+                case '7':
+                    if($diff_time % 10800 == 0){
+                        
+                    }
+                    break;
+                case '8':
+                    if($diff_time % 21600 == 0){
+                        
+                    }
+                    break;
+                case '9':
+                    if($diff_time % 43200 == 0){
+                        
+                    }
+                    break;
+                case '10':
+                    if($diff_time % 86400 == 0){
+                        
+                    }
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
     }
 }
