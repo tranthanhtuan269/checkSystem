@@ -37,17 +37,17 @@
                       <label for="staticEmail" class="col-sm-4 col-form-label">Thời gian kiểm tra</label>
                       <div class="col-sm-8">
                         <select class="custom-select mr-sm-2" id="timeInterval">
-                          <option value="0" selected>Chọn 1 khoảng thời gian...</option>
-                          <option value="1">Mỗi phút</option>
-                          <option value="2">Mỗi 5 phút</option>
-                          <option value="3">Mỗi 10 phút</option>
-                          <option value="4">Mỗi 15 phút</option>
-                          <option value="5">Mỗi 30 phút</option>
-                          <option value="6">Mỗi giờ</option>
-                          <option value="7">Mỗi 3 giờ</option>
-                          <option value="8">Mỗi 6 giờ</option>
-                          <option value="9">Mỗi 12 giờ</option>
-                          <option value="10">Mỗi ngày</option>
+                          <option value="0" @if($config->value == 0) selected @endif>Chọn 1 khoảng thời gian...</option>
+                          <option value="1" @if($config->value == 1) selected @endif>Mỗi phút</option>
+                          <option value="2" @if($config->value == 2) selected @endif>Mỗi 5 phút</option>
+                          <option value="3" @if($config->value == 3) selected @endif>Mỗi 10 phút</option>
+                          <option value="4" @if($config->value == 4) selected @endif>Mỗi 15 phút</option>
+                          <option value="5" @if($config->value == 5) selected @endif>Mỗi 30 phút</option>
+                          <option value="6" @if($config->value == 6) selected @endif>Mỗi giờ</option>
+                          <option value="7" @if($config->value == 7) selected @endif>Mỗi 3 giờ</option>
+                          <option value="8" @if($config->value == 8) selected @endif>Mỗi 6 giờ</option>
+                          <option value="9" @if($config->value == 9) selected @endif>Mỗi 12 giờ</option>
+                          <option value="10" @if($config->value == 10) selected @endif>Mỗi ngày</option>
                         </select>
                       </div>
                     </div>

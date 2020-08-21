@@ -33,7 +33,8 @@ class HomeController extends Controller
     }
 
     public function settings(){
-        return view('settings');
+        $config = Config::where('key', 'interval')->first();
+        return view('settings', ['config' => $config]);
     }
 
     public function addWeb(Request $request){
