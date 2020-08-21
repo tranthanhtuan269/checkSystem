@@ -88,6 +88,7 @@ class HomeController extends Controller
         $config = Config::where('key', 'interval')->first();
         if($config){
             $config->value = $request->setting;
+            $config->updated_at = date("Y/m/d H:i:s");
             $config->save();
         }
 
