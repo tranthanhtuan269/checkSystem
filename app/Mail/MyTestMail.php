@@ -16,9 +16,8 @@ class MyTestMail extends Mailable
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct()
     {
-        $this->details = $details;
     }
 
     /**
@@ -29,6 +28,6 @@ class MyTestMail extends Mailable
     public function build()
     {
         return $this->subject('Mail from TOH soft')
-                    ->view('content-email');
+                    ->view('hello-email');
     }
 }
