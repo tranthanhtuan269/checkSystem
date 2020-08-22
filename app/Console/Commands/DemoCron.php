@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Email;
-use App\Config;
 use App\Website;
 use App\Helper\Helper;
 
@@ -41,77 +40,8 @@ class DemoCron extends Command
      */
     public function handle()
     {
-        $config = Config::where('key', 'interval')->first();
-        if($config){
-            $diff_time=strtotime(date("Y/m/d H:i:s"))-strtotime($config->updated_at);
-            switch ($config->value) {
-                case '1':
-                    if($diff_time % 60 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '2':
-                    if($diff_time % 300 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '3':
-                    if($diff_time % 600 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '4':
-                    if($diff_time % 900 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '5':
-                    if($diff_time % 1800 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '6':
-                    if($diff_time % 3600 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '7':
-                    if($diff_time % 10800 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '8':
-                    if($diff_time % 21600 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '9':
-                    if($diff_time % 43200 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                case '10':
-                    if($diff_time % 86400 == 0){
-                        $this->checkAction();
-                    }
-                    break;
-                
-                default:
-                    # code...
-                    break;
-            }
-        }
-        /*
-           Write your database logic we bellow:
-           Item::create(['name'=>'hello new']);
-        */
-      
-        $this->info('Demo:Cron Cummand Run successfully!');
-    }
-
-    public function checkAction(){
-
         \Log::info("Cron is working fine!");
+
         $websites = Website::get();
 
         foreach($websites as $website){
@@ -135,5 +65,12 @@ class DemoCron extends Command
         }
 
         \Log::info("Cron is working fine 2!");
+     
+        /*
+           Write your database logic we bellow:
+           Item::create(['name'=>'hello new']);
+        */
+      
+        $this->info('Demo:Cron Cummand Run successfully!');
     }
 }
