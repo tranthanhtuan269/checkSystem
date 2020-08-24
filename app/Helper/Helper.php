@@ -26,7 +26,7 @@ class Helper
         
         if($status === null)
         {
-            if($httpCode < 400)
+            if($httpCode < 500)
             {
                 return 1;
             }
