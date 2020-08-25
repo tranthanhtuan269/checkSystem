@@ -126,9 +126,12 @@ class HomeController extends Controller
     }
 
     public function test(){
-        $ip = gethostbyname('vidconverteronline.com');
-
-        echo $ip;
-        dd(Helper::http_response("http://vidconverteronline.com"));
-    }
+        $fp = @fsockopen('http://jdasljkda.com', $port=80, $errno, $errstr, 2);
+        if (!$fp) {
+            echo  'OFFLINE';
+        } else{
+           echo 'ONLINE';
+        
+        }
+   }
 }
