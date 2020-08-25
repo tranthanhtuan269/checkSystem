@@ -126,6 +126,9 @@ class HomeController extends Controller
     }
 
     public function test(){
+        $ip = gethostbyname('vidconverteronline.com');
+
+        echo $ip;
         dd(Helper::http_response("http://vidconverteronline.com"));
     }
 }
