@@ -18,9 +18,9 @@ class Helper
         $head = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        dd("$httpCode:" . $httpCode);
-        dd($status);
-        dd(!$head);
+        // dd("httpCode:" . $httpCode);
+        // dd($status);
+        dd($head);
 
         curl_close($ch);
         
