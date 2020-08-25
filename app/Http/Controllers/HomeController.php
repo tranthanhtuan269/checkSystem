@@ -13,6 +13,17 @@ class HomeController extends Controller
     public function index(){
         $websites = Website::get();
         $obj_email = Email::first();
+
+        foreach($websites as $website){
+            if(Helper::http_response($website->link) == 1){
+                $website->status = 1;
+            }else{
+                $website->status = 0;
+            }
+            
+            $website->save();
+        }
+        
     	return view('home', ['email' => $obj_email, 'websites' => $websites]);
     }
 
