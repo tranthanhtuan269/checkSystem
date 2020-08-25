@@ -126,66 +126,6 @@ class HomeController extends Controller
     }
 
     public function test(){
-        $config = Config::where('key', 'interval')->first();
-
-        if($config){
-            $diff_time=strtotime(date("Y/m/d H:i:s"))-strtotime($config->updated_at);
-            switch ($config->value) {
-                case '1':
-                    if($diff_time % 60 == 0){
-                        
-                    }
-                    break;
-                case '2':
-                    if($diff_time % 300 == 0){
-                        
-                    }
-                    break;
-                case '3':
-                    if($diff_time % 600 == 0){
-                        
-                    }
-                    break;
-                case '4':
-                    if($diff_time % 900 == 0){
-                        
-                    }
-                    break;
-                case '5':
-                    if($diff_time % 1800 == 0){
-                        
-                    }
-                    break;
-                case '6':
-                    if($diff_time % 3600 == 0){
-                        
-                    }
-                    break;
-                case '7':
-                    if($diff_time % 10800 == 0){
-                        
-                    }
-                    break;
-                case '8':
-                    if($diff_time % 21600 == 0){
-                        
-                    }
-                    break;
-                case '9':
-                    if($diff_time % 43200 == 0){
-                        
-                    }
-                    break;
-                case '10':
-                    if($diff_time % 86400 == 0){
-                        
-                    }
-                    break;
-                
-                default:
-                    # code...
-                    break;
-            }
-        }
+        dd(Helper::http_response("http://vidconverteronline.com"));
     }
 }

@@ -17,6 +17,11 @@ class Helper
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         $head = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        dd($httpCode);
+        dd($status);
+        dd(!$head);
+
         curl_close($ch);
         
         if(!$head)
@@ -26,7 +31,7 @@ class Helper
         
         if($status === null)
         {
-            if($httpCode < 500)
+            if($httpCode < 400)
             {
                 return 1;
             }
