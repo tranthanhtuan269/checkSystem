@@ -126,12 +126,6 @@ class HomeController extends Controller
     }
 
     public function test(){
-        $fp = @fsockopen('http://jdasljkda.com', $port=80, $errno, $errstr, 2);
-        if (!$fp) {
-            echo  'OFFLINE';
-        } else{
-           echo 'ONLINE';
-        
-        }
+        dd(Helper::http_response('sadasdsadas.com'));
    }
 }
