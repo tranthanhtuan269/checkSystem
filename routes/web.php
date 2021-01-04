@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// cronjob insert visited
+Route::get('save-cache-visited', 'CronjobController@saveVisited');
 
 Route::get('/', 'HomeController@index');
 Route::post('/remove-website', 'HomeController@removeWeb');
@@ -24,3 +26,6 @@ Route::get('/settings', 'HomeController@settings');
 Route::post('/save-config', 'HomeController@saveConfig');
 Route::get('/emails', 'HomeController@emails');
 Route::get('/test', 'HomeController@test');
+
+Route::get('statistical', 'StatisticalController@show')->name('client.show-statistical');
+Route::get('get-data-ajax-highchart','StatisticalController@getDataAjaxHighchart')->name('client.highchart');
