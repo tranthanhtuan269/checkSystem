@@ -26,7 +26,5 @@ class Controller extends BaseController
             setcookie('cache_visited', "visited", time() + 86400 );// 1 day
             // dd(Cache::get('cache_visited'));
         }
-
-        dd(Cache::get('cache_visited'));
     }
 }
