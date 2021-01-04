@@ -6,10 +6,18 @@ use Illuminate\Http\Request;
 use App\Email;
 use App\Config;
 use App\Website;
+use App\Statistical;
 use App\Helper\Helper;
 
 class HomeController extends Controller
 {
+    public function createCacheVisited(Request $request){
+        Statistical::insert([
+            'web' => $request->web,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+    }
+
     public function index(){
         $websites = Website::get();
         $obj_email = Email::first();
