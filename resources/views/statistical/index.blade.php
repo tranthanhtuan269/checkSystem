@@ -162,11 +162,11 @@
             },
                 tooltip: {
                     formatter: function () {
-                        return '<b>' + this.point.y + '</b>' + ' người dùng mới';
+                        return '<b>' + this.point.y + '</b>' + ' lượt visited';
                     }
                 },
                 series: [{
-                    name: 'Báo cáo ' + txt_report.toLowerCase() + ' (<span class="total">'+ total +'</span> người dùng mới)',
+                    name: 'Báo cáo ' + txt_report.toLowerCase() + ' (<span class="total">'+ total +'</span> lượt visited)',
                     data: arr,
                     events: {
                         legendItemClick: function() {

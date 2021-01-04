@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Statistical;
 use Cache;
 
-class CronjobController extends Controller
+class CronJobController extends Controller
 {
     public function saveVisited(){
         if (Cache::has('cache_visited')) {
