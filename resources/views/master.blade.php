@@ -38,4 +38,9 @@
       </div>
     </div>
   </body>
+  <script>
+    function daysInMonth (month, year) {
+        return new Date(year, month, 0).getDate();
+    }
+  </script>
 </html>

@@ -6,20 +6,20 @@
             <div class="pull-right">
                 <label>Xem nhanh</label>
                 <label class="dropdown">
-                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="name-dropdown">Hôm nay</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li class="active"><a class="dropdown-item" href="javascript:void(0)" data-id="1">Hôm nay</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" data-id="2">Hôm qua</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" data-id="3">Tuần này</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" data-id="4">Tuần trước</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" data-id="5">Tháng này</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" data-id="6">Tháng trước</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" data-id="7">Năm nay</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" data-id="8">Năm trước</a></li>
-                            {{-- <li><a class="dropdown-item" href="javascript:void(0)" data-id="9">Tùy chỉnh</a></li> --}}
-                        </ul>
+                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="name-dropdown"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item @if(!Request::get('type')) active @endif" href="/statistical?web={{ Request::get('web') }}">Hôm nay</a></li>
+                        <li><a class="dropdown-item @if(Request::get('type') == 2) active @endif" href="/statistical?web={{ Request::get('web') }}&type=2">Hôm qua</a></li>
+                        <li><a class="dropdown-item @if(Request::get('type') == 3) active @endif" href="/statistical?web={{ Request::get('web') }}&type=3">Tuần này</a></li>
+                        <li><a class="dropdown-item @if(Request::get('type') == 4) active @endif" href="/statistical?web={{ Request::get('web') }}&type=4">Tuần trước</a></li>
+                        <li><a class="dropdown-item @if(Request::get('type') == 5) active @endif" href="/statistical?web={{ Request::get('web') }}&type=5">Tháng này</a></li>
+                        <li><a class="dropdown-item @if(Request::get('type') == 6) active @endif" href="/statistical?web={{ Request::get('web') }}&type=6">Tháng trước</a></li>
+                        <li><a class="dropdown-item @if(Request::get('type') == 7) active @endif" href="/statistical?web={{ Request::get('web') }}&type=7">Năm nay</a></li>
+                        <li><a class="dropdown-item @if(Request::get('type') == 8) active @endif" href="/statistical?web={{ Request::get('web') }}&type=8">Năm trước</a></li>
+                        {{-- <li><a class="dropdown-item" href="javascript:void(0)" data-id="9">Tùy chỉnh</a></li> --}}
+                    </ul>
                 </label>
             </div>
         </div>
@@ -76,141 +76,106 @@
     
     <script type="text/javascript">
         $(document).ready(function(){    
-            $('.content .dropdown-menu li').on('click', function() {
-                $('.dropdown-menu li').removeClass('active');
-                $(this).addClass('active');
-                var type = $(this).find('a').data('id');
-    
-                arr_filter_tmp = [];
-                $('.name-dropdown').text($(this).text());
-                var flag = false;
-                var txt_report = $(this).text();
-    
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN'    : $('meta[name="csrf-token"]').attr('content')
+            var response = $.parseJSON(<?php echo json_encode($data); ?>);
+            var type = '{{ Request::get("type") }}';
+            type = type > 0 ? type : 1;
+            var txt_report = $('a.dropdown-item.active').text();
+            $('.name-dropdown').text(txt_report);
+            var categories = [];
+            var data = response.data;
+            var total = 0;
+            var arr = []
+
+            if(type == 1 || type == 2) {
+                for (let index = 0; index <= 23; index++) {
+                    categories.push(index + 'h');
+
+                    if (data[index]) {
+                        arr[index] = data[index];
+                        total += data[index];
+                    } else {
+                        arr[index] = 0;
                     }
+                }
+            } else if (type == 3 || type == 4) {
+                jQuery.each(data, function(index, item) {
+                    arr.push(item.value)
+                    total += item.value;
                 });
                 
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('client.highchart') }}",
-                    data: { type: type },
-                    beforeSend: function(r, a){
-                        
-                    },
-                    success: function (response) {
-                        if(response.status == 200){
-                            var categories = [];
-                            var data = response.data;
-                            var total = 0;
-                            var arr = []
-    
-                            if(type == 1 || type == 2) {
-                                for (let index = 0; index <= 23; index++) {
-                                    categories.push(index + 'h');
-    
-                                    if (data[index]) {
-                                        arr[index] = data[index];
-                                        total += data[index];
-                                    } else {
-                                        arr[index] = 0;
-                                    }
-                                }
-                            } else if (type == 3 || type == 4) {
-                                jQuery.each(data, function(index, item) {
-                                    arr.push(item.value)
-                                    total += item.value;
-                                });
-                                
-                                categories = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật']
-                            } else if(type == 5 || type == 6) {
-    
-                                for (let index = 1; index <= daysInMonth(response.month, response.year); index++) {
-                                    categories.push(index);
-    
-                                    if (data[index]) {
-                                        arr[index-1] = data[index];
-                                        total += data[index];
-                                    } else {
-                                        arr[index-1] = 0;
-                                    }
-    
-                                }
-                                console.log(categories);
-                            } else if (type == 7 || type == 8) {
-                                for (let index = 1; index <= 12; index++) {
-                                    categories.push('Tháng ' + index);
-    
-                                    if (data[index]) {
-                                        arr[index-1] = data[index];
-                                        total += data[index];
-                                    } else {
-                                        arr[index-1] = 0;
-                                    }
-    
-                                }
-                            } else {
-    
-                            }
-    
-                            // console.log(categories)
-                            Highcharts.chart('chart-customer', {
-                                chart: {
-                                    style: {
-                                        fontSize: '15px',
-                                        fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"'
-                                    }
-                                },
-                                title: {
-                                    text: 'Biểu đồ thống kê lượt khách visited'
-                                },
-                                xAxis: {
-                                    categories: categories,
-                                },
-                                yAxis: {
-                                    softMax: 10,
-                                    softMin: 0,
-                                    title: {
-                                        text: ''
-                                    },
-                                    labels: {
-                                        style: {
-                                            fontSize:'15px'
-                                        }
-                                    }
-                            },
-                                tooltip: {
-                                    formatter: function () {
-                                        return '<b>' + this.point.y + '</b>' + ' người dùng mới';
-                                    }
-                                },
-                                series: [{
-                                    name: 'Báo cáo ' + txt_report.toLowerCase() + ' (<span class="total">'+ total +'</span> người dùng mới)',
-                                    data: arr,
-                                    events: {
-                                        legendItemClick: function() {
-                                            return false;
-                                        }
-                                    }
-                                }],
-                            });
-    
-                            // if (flag) {
-                            //     $('.highcharts-axis-labels text:nth-child('+ flag +')').css({'fill' : 'red', 'font-weight' : '600'});
-                            //     $('.highcharts-series rect:nth-child('+ flag +')').css('fill','#6c757d');
-                            // }
-                    
-                        }
-                    },
-                    error: function (data) {
-                        alert('error')
+                categories = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật']
+            } else if(type == 5 || type == 6) {
+
+                for (let index = 1; index <= daysInMonth(response.month, response.year); index++) {
+                    categories.push(index);
+
+                    if (data[index]) {
+                        arr[index-1] = data[index];
+                        total += data[index];
+                    } else {
+                        arr[index-1] = 0;
                     }
-                });
-               
+
+                }
+                console.log(categories);
+            } else if (type == 7 || type == 8) {
+                for (let index = 1; index <= 12; index++) {
+                    categories.push('Tháng ' + index);
+
+                    if (data[index]) {
+                        arr[index-1] = data[index];
+                        total += data[index];
+                    } else {
+                        arr[index-1] = 0;
+                    }
+
+                }
+            } else {
+
+            }
+
+            // console.log(categories)
+            Highcharts.chart('chart-customer', {
+                chart: {
+                    style: {
+                        fontSize: '15px',
+                        fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"'
+                    }
+                },
+                title: {
+                    text: 'Biểu đồ thống kê lượt khách visited web <b>{{ Request::get("web") }}</b>'
+                },
+                xAxis: {
+                    categories: categories,
+                },
+                yAxis: {
+                    softMax: 10,
+                    softMin: 0,
+                    title: {
+                        text: ''
+                    },
+                    labels: {
+                        style: {
+                            fontSize:'15px'
+                        }
+                    }
+            },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.point.y + '</b>' + ' người dùng mới';
+                    }
+                },
+                series: [{
+                    name: 'Báo cáo ' + txt_report.toLowerCase() + ' (<span class="total">'+ total +'</span> người dùng mới)',
+                    data: arr,
+                    events: {
+                        legendItemClick: function() {
+                            return false;
+                        }
+                    }
+                }],
             });
-    
-            $('.dropdown-menu li.active').trigger('click');
+             
         });
     </script>
 @endsection

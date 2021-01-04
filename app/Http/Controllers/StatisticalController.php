@@ -7,12 +7,17 @@ use App\Statistical;
 
 class StatisticalController extends Controller
 {
-    public function show(){
-        return view('statistical.index');
+    public function show(Request $request){
+        $type = $request->type;
+        $type = $type > 0 ? $type : 1;
+        $domain = $request->web;
+        $data = file_get_contents($domain . '/get-data-ajax-highchart?type=' . $type);
+        return view('statistical.index', compact('data'));
     }
 
     public function getDataAjaxHighchart(Request $request){
         $type = $request->type;
+        $type = $type > 0 ? $type : 1;
         $thisDay = $thisMonth = $thisYear = '';
         $data = [];
 
@@ -77,7 +82,7 @@ class StatisticalController extends Controller
         } else { // Tùy chỉnh
             // $date_from = $date_from . " 00:00:00";
             // $date_from = $date_to . " 23:59:59";
-            // $data = Statistical::selectRaw('COUNT(id) as total, DATE_FORMAT(created_at, "%d/%m/%Y") as day')->whereBetween('created_at', [$request->date_from, $request->date_to])->groupBy('created_at')->pluck('total', 'day')->toArray();
+            // $data = Statistical::selectRaw('COUNT(id) as total, DATE_FORMAT(created_at, "%d/%m/%Y") as day')->where('type', 1)->whereBetween('created_at', [$request->date_from, $request->date_to])->groupBy('created_at')->pluck('total', 'day')->toArray();
         }
 
         return response()->json(['status' => 200, 'data' => $data, 'month' => $thisMonth, 'year' => $thisYear]);
