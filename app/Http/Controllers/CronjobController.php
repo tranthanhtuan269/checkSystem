@@ -8,11 +8,16 @@ use Cache;
 
 class CronJobController extends Controller
 {
-    public function saveVisited(){
+    public function saveVisitedWebsite(){
         if (Cache::has('cache_visited')) {
             $cache_visited = Cache::get('cache_visited');
-            Statistical::insert($cache_visited);
-            Cache::forget('cache_visited');
+
+            if (count($cache_visited) > 0) {
+                Statistical::insert($cache_visited);
+                Cache::forget('cache_visited');
+            } else {
+                echo 'empty';
+            }
         }
     }
 }

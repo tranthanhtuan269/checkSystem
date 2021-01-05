@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 // cronjob insert visited
-Route::get('save-cache-visited', 'CronjobController@saveVisited');
+Route::get('save-cache-visited-website', 'CronjobController@saveVisitedWebsite');
 
 Route::get('/', 'HomeController@index');
 Route::post('/remove-website', 'HomeController@removeWeb');
