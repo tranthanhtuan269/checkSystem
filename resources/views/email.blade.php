@@ -20,36 +20,34 @@
     		</div>
     	</div>
       <div class="row">
-        <div class="col-md-12 float-right text-right my-2">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModel">
-            <i class="fa fa-plus-square" aria-hidden="true"></i> Thêm mới email
-          </button>
-        </div>
         <div class="col-md-3">
-        <ul class="list-group">
-          <li class="list-group-item"><a href="{{ url('/') }}">Quản lý website</a></li>
-          <li class="list-group-item active">Quản lý email</li>
-          <li class="list-group-item"><a href="{{ url('/settings') }}">Quản lý Cấu hình</a></li>
-        </ul>
+          <ul class="list-group">
+            <li class="list-group-item"><a href="{{ url('/') }}">Quản lý website</a></li>
+            <li class="list-group-item active">Quản lý email</li>
+            <li class="list-group-item"><a href="{{ url('/settings') }}">Quản lý Cấu hình</a></li>
+          </ul>
         </div>
         <div class="col-md-9">
-          <div class="row">
-            <div class="col-md-12">
-              <ul class="list-group list-email">
-                @foreach($emails as $email)
-                  <li class="list-group-item list-group-item-success item-{{ $email->id }}">
-                    <span id="email-{{ $email->id }}">{{ $email->email }}</span>
-                    <button type="button" class="btn btn-danger float-right remove-btn" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
-                      <i class="fa fa-times" aria-hidden="true"></i> Xóa
-                    </button>
-                    <button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
-                      <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
-                    </button>
-                  </li>
-                @endforeach
-              </ul>
+          <div class="clearfix mb-3">
+            <div class="float-right">
+              <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModel">
+                <i class="fa fa-plus-square" aria-hidden="true"></i> Thêm mới email
+              </button>
             </div>
           </div>
+          <ul class="list-group list-email">
+            @foreach($emails as $email)
+              <li class="list-group-item list-group-item-success item-{{ $email->id }}">
+                <span id="email-{{ $email->id }}">{{ $email->email }}</span>
+                <button type="button" class="btn btn-danger float-right remove-btn" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
+                  <i class="fa fa-times" aria-hidden="true"></i> Xóa
+                </button>
+                <button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
+                  <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
+                </button>
+              </li>
+            @endforeach
+          </ul>
         </div>
       </div>
     </div>
