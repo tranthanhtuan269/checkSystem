@@ -11,6 +11,11 @@ class StatisticalController extends Controller
         $type = $request->type;
         $type = $type > 0 ? $type : 1;
         $domain = $request->web;
+
+        if ($domain == 'vidconverteronline.com') {
+            $domain = '173.230.153.183';
+        }
+
         $url = 'http://' . $domain . '/get-data-ajax-highchart?type=' . $type;
         $data = @file_get_contents($url);
         return view('statistical.index', compact('data'));
