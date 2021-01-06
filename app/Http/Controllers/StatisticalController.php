@@ -11,7 +11,8 @@ class StatisticalController extends Controller
         $type = $request->type;
         $type = $type > 0 ? $type : 1;
         $domain = $request->web;
-        $data = file_get_contents('http://' . $domain . '/get-data-ajax-highchart?type=' . $type);
+        $url = 'http://' . $domain . '/get-data-ajax-highchart?type=' . $type;
+        $data = @file_get_contents($url);
         return view('statistical.index', compact('data'));
     }
 
