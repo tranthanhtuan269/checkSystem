@@ -34,7 +34,7 @@ class StatisticalController extends Controller
                 $thisDay = date('Y-m-d', strtotime("-1 day"));
             } 
 
-            $data = Statistical::selectRaw('COUNT(id) as total, HOUR(created_at) as hour')->whereDate('created_at', $thisDay)->groupBy('hour')->pluck('total', 'hour')->toArray();
+            $data = Statistical::selectRaw('COUNT(id) as total, HOUR(created_at) as hour')->whereDate('created_at', '=', $thisDay)->groupBy('hour')->pluck('total', 'hour')->toArray();
             // dd($data);
         } elseif ($type == 3 || $type== 4) {
             if ($type== 3) { // Tuần nay
