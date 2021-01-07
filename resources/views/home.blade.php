@@ -18,7 +18,7 @@
           <button type="button" class="btn-sm btn btn-primary float-right edit-btn mx-2" data-id="{{ $website->id }}">
             <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
           </button>
-          <a style="color: #fff" class="btn-sm btn btn-secondary float-right edit-btn mx-2" href="{{ route('client.show-statistical') }}?web={{ $website->name }}" target="_blank">
+          <a style="color: #fff" class="btn-sm btn btn-secondary float-right edit-btn mx-2" href="{{ route('client.show-statistical') }}?web={{ $website->name }}">
             <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
           </a>
         </li>
@@ -31,7 +31,7 @@
           <button type="button" class="btn-sm btn btn-primary float-right edit-btn mx-2" data-id="{{ $website->id }}">
             <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
           </button>
-          <a style="color: #fff" class="btn-sm btn btn-secondary float-right edit-btn mx-2" href="{{ route('client.show-statistical') }}?web={{ $website->name }}" target="_blank">
+          <a style="color: #fff" class="btn-sm btn btn-secondary float-right edit-btn mx-2" href="{{ route('client.show-statistical') }}?web={{ $website->name }}">
             <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
           </a>
         </li>
