@@ -24,7 +24,6 @@ class Controller extends BaseController
             $cache_visited[]= ['created_at' => date('Y-m-d H:i:s')];
             Cache::put('cache_visited', $cache_visited);
             setcookie('cache_visited', "visited", time() + 86400 );// 1 day
-            // dd(Cache::get('cache_visited'));
         }
     }
 }
