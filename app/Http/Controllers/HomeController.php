@@ -39,24 +39,46 @@ class HomeController extends Controller
     }
 
     public function addWeb(Request $request){
-        if (strpos($request->link, 'http') == false) {
-            $request->link = 'http://' . $request->link;
+        $rules = [
+            'name'          => 'required|max:255|unique:websites,name',
+            'link'          => 'required',
+            'day_deploy'          => 'required',
+        ];
+        $messages = [];
+        $validator = \Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '404',
+                'errors' =>  $validator->errors(),
+            ]);
+        } else {
+            if (strpos($request->link, 'http') == false) {
+                $request->link = 'http://' . $request->link;
+            }
+
+            if (strpos($request->link_admin, 'http') == false) {
+                $request->link_admin = 'http://' . $request->link_admin;
+            }
+
+            $website = new Website;
+            $website->name = $request->name;
+            $website->link = $request->link;
+            $website->link_admin = $request->link_admin;
+            $website->day_deploy = \Carbon\Carbon::parse($request->day_deploy)->format('Y-m-d');
+            $website->status = Helper::http_response($website->link);
+            $website->save();
+    
+            return response()->json([
+                'message' => 'OK',
+                'status' => '200',
+                'id_website' => $website->id,
+                'name_website' => $website->name,
+                'link_website' => $website->link,
+                'day_deploy' => $website->day_deploy,
+                'link_admin' => $website->link_admin,
+                'status_website' => $website->status,
+            ]);
         }
-
-        $website = new Website;
-        $website->name = $request->name;
-        $website->link = $request->link;
-        $website->status = Helper::http_response($website->link);
-        $website->save();
-
-        return response()->json([
-            'message' => 'OK',
-            'status' => '201',
-            'id_website' => $website->id,
-            'name_website' => $website->name,
-            'link_website' => $website->link,
-            'status_website' => $website->status,
-        ]);
     }
 
     public function addEmail(Request $request){

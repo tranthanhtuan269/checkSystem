@@ -7,37 +7,43 @@
         </button>
       </div>
     </div>
-    <ul class="list-group list-website clearfix">
-      @foreach($websites as $website)
-        @if($website->status == 1)
-        <li class="list-group-item list-group-item-success item-{{ $website->id }}">
-          <a id="website-{{ $website->id }}" href="{{ $website->link }}">{{ $website->name }}</a>
-          <button type="button" class="btn-sm btn btn-danger float-right remove-btn" data-id="{{ $website->id }}">
-            <i class="fa fa-times" aria-hidden="true"></i> Xóa
-          </button>
-          <button type="button" class="btn-sm btn btn-primary float-right edit-btn mx-2" data-id="{{ $website->id }}">
-            <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
-          </button>
-          <a style="color: #fff" class="btn-sm btn btn-secondary float-right mx-2" href="{{ route('client.show-statistical') }}?web={{ $website->name }}" target="_blank">
-            <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
-          </a>
-        </li>
-        @else
-        <li class="list-group-item list-group-item-danger item-{{ $website->id }}">
-          <a id="website-{{ $website->id }}" href="{{ $website->link }}">{{ $website->name }}</a>
-          <button type="button" class="btn-sm btn btn-danger float-right remove-btn" data-id="{{ $website->id }}">
-            <i class="fa fa-times" aria-hidden="true"></i> Xóa
-          </button>
-          <button type="button" class="btn-sm btn btn-primary float-right edit-btn mx-2" data-id="{{ $website->id }}">
-            <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
-          </button>
-          <a style="color: #fff" class="btn-sm btn btn-secondary float-right mx-2" href="{{ route('client.show-statistical') }}?web={{ $website->name }}" target="_blank">
-            <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
-          </a>
-        </li>
-        @endif
-      @endforeach
-    </ul>
+    <div class="list-group list-website table-responsive clearfix">
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th class="text-center">Tên web</th>
+            <th class="text-center">Ngày deploy</th>
+            <th class="text-center">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($websites as $website)
+            <tr class="{{ $website->status == 1 ? 'table-success' : 'table-danger' }}">
+              <td> <a id="website-{{ $website->id }}" href="{{ $website->link }}">{{ $website->name }}</a></td>
+              <td class="text-center">{{ $website->day_deploy }}</td>
+              <td class="text-center">
+                <div class="list-group-item-cs item-{{ $website->id }}">
+                  @if (!empty($website->link_admin))
+                    <a style="color: #fff" class="btn-sm btn btn-info" href="{{ $website->link_admin }}" target="_blank">
+                      <i class="fa fa-adn" aria-hidden="true"></i> Go Admin
+                    </a>
+                  @endif
+                  <a style="color: #fff" class="btn-sm btn btn-secondary" href="{{ route('client.show-statistical') }}?web={{ $website->name }}" target="_blank">
+                    <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
+                  </a>
+                  <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="{{ $website->id }}">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
+                  </button>
+                  <button type="button" class="btn-sm btn btn-danger remove-btn" data-id="{{ $website->id }}">
+                    <i class="fa fa-times" aria-hidden="true"></i> Xóa
+                  </button>
+                </div>
+              </td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="createModel" tabindex="-1" role="dialog" aria-labelledby="emailModelLabel" aria-hidden="true">
@@ -52,22 +58,38 @@
           <div class="modal-body">
             <form>
               <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
-                  <input type="text" name="name" class="form-control" id="nametxt" value="">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Tên web</label>
+                <div class="col-sm-9">
+                  <input type="text" name="name" class="form-control" id="nametxt" value="" placeholder="vd: gospeedcheck.com">
+                  <div class="alert-name"></div>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Link</label>
-                <div class="col-sm-10">
-                  <input type="text" name="link" class="form-control" id="linktxt" value="">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Link</label>
+                <div class="col-sm-9">
+                  <input type="text" name="link" class="form-control" id="linktxt" value="" placeholder="vd: http://gospeedcheck.com">
+                  <div class="alert-link"></div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Link admin</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="link_admin" value="" placeholder="vd: http://gospeedcheck.com/toh-admin">
+                  <div class="alert-link_admin"></div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Ngày deploy</label>
+                <div class="col-sm-9">
+                  <input autocomplete="off" id="day_deploy" type="text" class="w-100 form-control" maxlength="10" placeholder="vd: 20/10/2020">
+                  <div class="alert-day_deploy"></div>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn-sm btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn-sm btn btn-primary" id="save-btn">Save</button>
+            <button type="button" class="btn-sm btn btn-primary" id="save-btn"> Lưu </button>
+            <button type="button" class="btn-sm btn btn-secondary" data-dismiss="modal">Đóng</button>
           </div>
         </div>
       </div>
@@ -86,22 +108,22 @@
           <div class="modal-body">
             <form>
               <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Tên web</label>
+                <div class="col-sm-9">
                   <input type="text" name="name" class="form-control" id="edtnametxt" value="">
                 </div>
               </div>
               <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Link</label>
-                <div class="col-sm-10">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Link</label>
+                <div class="col-sm-9">
                   <input type="text" name="link" class="form-control" id="edtlinktxt" value="">
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn-sm btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn-sm btn btn-primary" id="update-btn">Save</button>
+            <button type="button" class="btn-sm btn btn-primary" id="update-btn"> Lưu </button>
+            <button type="button" class="btn-sm btn btn-secondary" data-dismiss="modal">Đóng</button>
           </div>
         </div>
       </div>
@@ -109,6 +131,26 @@
 
     <script>
       $(document).ready(function(){
+
+        var dateRegex = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-.\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;            Date.prototype.isValidDate = function () {
+            return this.getTime() === this.getTime();
+        };  
+        Date.prototype.isValidDate = function () {
+            return this.getTime() === this.getTime();
+        };  
+
+        $( "#day_deploy" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1970:{{ date('Y') }}",
+            dateFormat: 'dd/mm/yy',
+            maxDate : new Date(),
+        } );
+
+        $("#createModel").on("hidden.bs.modal", function () {
+          clearForm()
+        });
+
         action();
         function action(){
           $('.edit-btn').off('click');
@@ -147,7 +189,7 @@
                 });
                 
                 request.done(function( msg ) {
-                  self.parent().remove();
+                  self.parent().parent().parent().remove();
                 });
                 
                 request.fail(function( jqXHR, textStatus ) {
@@ -193,19 +235,46 @@
           });
         })
 
-        
+        function clearForm() {
+          $('.alert-error').html('')
+          $('#createModel input').val('');
+        }
+
         $('#save-btn').click(function(){
+          $('.alert-error').html('')
           var object_name = $('#nametxt').val();
           var object_link = $('#linktxt').val();
+          var link_admin = $('#link_admin').val();
+          var day_deploy = $('#day_deploy').val();
 
-          if(object_name.length == 0){
-            swal("Ồ!", "Tên website không được để trống!", "error");
-            return false;
+          if (object_name == '') {
+              $('.alert-name').html('Tên web không được để trống!').addClass('alert-error');
+              return;
           }
 
-          if(object_link.length == 0){
-            swal("Ồ!", "Link website không được để trống!", "error");
-            return false;
+          if (object_link == '') {
+              $('.alert-link').html('Link không được để trống!').addClass('alert-error');
+              return;
+          }
+
+          if (day_deploy == '') {
+              $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
+              return;
+          }
+
+          if (day_deploy != '') {
+              if (dateRegex.test(day_deploy) != true) {
+                $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+                return;
+              } else {
+                  day_deploy = day_deploy.split('/');
+                  day_deploy = day_deploy[2] + '-' + day_deploy[1] + '-' + day_deploy[0]
+
+                  if (new Date(day_deploy).isValidDate() == false) {
+                    $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+                    return;
+                  }
+              }
           }
 
           $.ajaxSetup({
@@ -213,44 +282,67 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
+          $.ajax({
+              type: "POST",
+              url: "{{ url('/') }}/add-website",
+              data: { 
+                name : object_name.trim(),
+                link : object_link.trim(),
+                link_admin : link_admin.trim(),
+                day_deploy : day_deploy.trim(),
+              },
+              dataType:'json',
+              beforeSend: function(r, a){
+                  $(".ajax_waiting").addClass("loading");
+              },
+              complete: function() {
+                  $(".ajax_waiting").removeClass("loading");
+              },
+              success: function (obj) {
+                  if(obj.status == 200){
+                    // swal({
+                    //   // title: "Are you sure?",
+                    //   text: "Thêm mới website thành công!",
+                    //   icon: "success",
+                    //   buttons: true,
+                    //   // dangerMode: true,
+                    // })
+                    // .then((willDelete) => {
+                    //   location.reload();
+                    // });
+                      $html = '';
+                      if(obj.status_website == 1){
+                        $html = '<tr class="table-success">';
+                      }else{
+                        $html = '<tr class="table-danger">';
+                      }
 
-          var request = $.ajax({
-            url: "{{ url('/') }}/add-website",
-            method: "POST",
-            data: { 
-              name : object_name,
-              link : object_link,
-            },
-            dataType: "json"
-          });
-          
-          request.done(function( msg ) {
-            var obj = msg;
-            if(obj.message == "OK"){
-              $html = '';
-              if(obj.status_website == 1){
-                $html = '<li class="list-group-item list-group-item-success item-'+obj.id_website+'">';
-              }else{
-                $html = '<li class="list-group-item list-group-item-danger item-'+obj.id_website+'">';
+                        $html += '<td><a id="website-'+obj.id_website+'" href="'+obj.link_website+'">'+obj.name_website+'</a></td>';
+                        $html += '<td class="text-center">'+obj.day_deploy+'</td>';
+                        $html += '<td class="text-center">'
+                          $html += '<div class="list-group-item-cs item-'+obj.id_website+'">'
+                            if(obj.link_admin != null){
+                              $html += '<a style="color: #fff" class="btn-sm btn btn-info" href="'+obj.link_admin+'" target="_blank"><i class="fa fa-adn" aria-hidden="true"></i> Go Admin</a>';
+                            }
+                            $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary" href="#" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
+                            $html += ' <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="'+obj.id_website+'"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</button>'
+                            $html += ' <button type="button" class="btn-sm btn btn-danger remove-btn" data-id="'+obj.id_website+'"><i class="fa fa-times" aria-hidden="true"></i> Xóa</button>';
+                          $html += '</div>';
+                        $html += '</td>';
+                      $html += '</tr>';
+                    $('.list-website tbody').append($html);
+                    clearForm();
+                    $('#createModel').modal('toggle');
+                    action();
+                  } else {
+                      $.each(obj.errors, function( index, value ) {
+                          $('.alert-' + index).html(value).addClass('alert-error');
+                      });
+                  }
+              },
+              error: function (data) {
+
               }
-              $html += '<a id="website-'+obj.id_website+'" href="'+obj.link_website+'">'+obj.name_website+'</a>';
-              $html += '<button type="button" class="btn-sm btn btn-danger float-right remove-btn" data-id="'+obj.id_website+'">';
-              $html += '<i class="fa fa-times" aria-hidden="true"></i> Xóa';
-              $html += '</button>';
-              $html += '<button type="button" class="btn-sm btn btn-primary float-right edit-btn mx-2" data-id="'+obj.id_website+'">';
-              $html += '<i class="fa fa-pencil" aria-hidden="true"></i> Sửa';
-              $html += '</button>';
-              $html += '</li>';
-            }
-            $('.list-website').append($html);
-            $('#nametxt').val('');
-            $('#linktxt').val('');
-            $('#createModel').modal('toggle');
-            action();
-          });
-          
-          request.fail(function( jqXHR, textStatus ) {
-            alert( "Request failed: " + textStatus );
           });
         })
       })
