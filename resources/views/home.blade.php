@@ -28,7 +28,7 @@
                       <i class="fa fa-adn" aria-hidden="true"></i> Go Admin
                     </a>
                   @endif
-                  <a style="color: #fff" class="btn-sm btn btn-secondary" href="{{ route('client.show-statistical') }}?web={{ $website->link_website }}" target="_blank">
+                  <a style="color: #fff" class="btn-sm btn btn-secondary" href="{{ route('client.show-statistical') }}?web={{ $website->link }}" target="_blank">
                     <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
                   </a>
                   <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="{{ $website->id }}">
@@ -376,7 +376,7 @@
                             if(obj.link_admin != null){
                               $html += '<a style="color: #fff" class="btn-sm btn btn-info" href="'+obj.link_admin+'" target="_blank"><i class="fa fa-adn" aria-hidden="true"></i> Go Admin</a>';
                             }
-                            $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary" href="/statistical/web='+ obj.link_website +'" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
+                            $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary" href="/statistical?web='+ obj.link_website +'" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
                             $html += ' <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="'+obj.id_website+'"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</button>'
                             $html += ' <button type="button" class="btn-sm btn btn-danger remove-btn" data-id="'+obj.id_website+'"><i class="fa fa-times" aria-hidden="true"></i> Xóa</button>';
                           $html += '</div>';
