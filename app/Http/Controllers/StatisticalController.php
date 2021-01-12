@@ -11,6 +11,10 @@ class StatisticalController extends Controller
         $type = $request->type;
         $type = $type > 0 ? $type : 1;
         $domain = $request->web;
+        $domain = str_replace("https://", "", $domain);
+        $domain = str_replace("http://", "", $domain);
+        $domain = str_replace("https", "", $domain);
+        $domain = str_replace("http", "", $domain);
 
         if ($domain == 'vidconverteronline.com') {
             $domain = '173.230.153.183';

@@ -52,11 +52,11 @@ class HomeController extends Controller
                 'errors' =>  $validator->errors(),
             ]);
         } else {
-            if (strpos($request->link, 'http') == false) {
+            if (strpos($request->link, 'http') === false) {
                 $request->link = 'http://' . $request->link;
             }
 
-            if (strpos($request->link_admin, 'http') == false) {
+            if (strpos($request->link_admin, 'http') === false) {
                 $request->link_admin = 'http://' . $request->link_admin;
             }
 
@@ -64,7 +64,7 @@ class HomeController extends Controller
             $website->name = $request->name;
             $website->link = $request->link;
             $website->link_admin = $request->link_admin;
-            $website->day_deploy = \Carbon\Carbon::parse($request->day_deploy)->format('Y-m-d');
+            $website->day_deploy = $request->day_deploy;
             $website->status = Helper::http_response($website->link);
             $website->save();
     
@@ -122,17 +122,43 @@ class HomeController extends Controller
     }
 
     public function updateWebsite(Request $request){
-        $website = Website::find($request->id);
-        if($website){
-            $website->name = $request->name;
-            $website->link = $request->link;
-            $website->save();
-        }
+        $rules = [
+            'name'          => 'required|max:255|unique:websites,name,'.$request->id,
+            'link'          => 'required',
+            'day_deploy'          => 'required',
+        ];
+        $messages = [];
+        $validator = \Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '404',
+                'errors' =>  $validator->errors(),
+            ]);
+        } else {
+            
+            if (strpos($request->link, 'http') === false) {
+                $request->link = 'http://' . $request->link;
+            }
 
-        return response()->json([
-            'message' => 'OK',
-            'status' => '201',
-        ]);
+            if (strpos($request->link_admin, 'http') === false) {
+                $request->link_admin = 'http://' . $request->link_admin;
+            }
+            // dd($request->link);
+            $website = Website::find($request->id);
+
+            if($website){
+                $website->name = $request->name;
+                $website->link = $request->link;
+                $website->link_admin = $request->link_admin;
+                $website->day_deploy = $request->day_deploy;
+                $website->save();
+            }
+    
+            return response()->json([
+                'message' => 'OK',
+                'status' => '200',
+            ]);
+        }
     }
 
     public function removeEmail(Request $request){

@@ -39,10 +39,10 @@
             @foreach($emails as $email)
               <li class="list-group-item list-group-item-success item-{{ $email->id }}">
                 <span id="email-{{ $email->id }}">{{ $email->email }}</span>
-                <button type="button" class="btn btn-danger float-right remove-btn" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
+                <button type="button" class="btn btn-sm btn-danger float-right remove-btn" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
                   <i class="fa fa-times" aria-hidden="true"></i> Xóa
                 </button>
-                <button type="button" class="btn btn-primary float-right edit-btn mx-2" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
+                <button type="button" class="btn btn-sm btn-primary float-right edit-btn mx-2" data-id="{{ $email->id }}" data-toggle="modal" data-target="#editModel">
                   <i class="fa fa-pencil" aria-hidden="true"></i> Sửa
                 </button>
               </li>

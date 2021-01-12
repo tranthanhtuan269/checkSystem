@@ -19,8 +19,8 @@
         <tbody>
           @foreach($websites as $website)
             <tr class="{{ $website->status == 1 ? 'table-success' : 'table-danger' }}">
-              <td> <a id="website-{{ $website->id }}" href="{{ $website->link }}">{{ $website->name }}</a></td>
-              <td class="text-center">{{ $website->day_deploy }}</td>
+              <td> <a id="website-{{ $website->id }}" href="{{ $website->link }}" data-link_admin="{{ $website->link_admin }}" data-day_deploy="{{ \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y') }}">{{ $website->name }}</a></td>
+              <td class="text-center" id="day_deploy-{{ $website->id }}">{{ \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y') }}</td>
               <td class="text-center">
                 <div class="list-group-item-cs item-{{ $website->id }}">
                   @if (!empty($website->link_admin))
@@ -28,7 +28,7 @@
                       <i class="fa fa-adn" aria-hidden="true"></i> Go Admin
                     </a>
                   @endif
-                  <a style="color: #fff" class="btn-sm btn btn-secondary" href="{{ route('client.show-statistical') }}?web={{ $website->name }}" target="_blank">
+                  <a style="color: #fff" class="btn-sm btn btn-secondary" href="{{ route('client.show-statistical') }}?web={{ $website->link_website }}" target="_blank">
                     <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
                   </a>
                   <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="{{ $website->id }}">
@@ -81,7 +81,7 @@
               <div class="form-group row">
                 <label for="staticEmail" class="col-sm-3 col-form-label">Ngày deploy</label>
                 <div class="col-sm-9">
-                  <input autocomplete="off" id="day_deploy" type="text" class="w-100 form-control" maxlength="10" placeholder="vd: 20/10/2020">
+                  <input autocomplete="off" type="text" class="day_deploy w-100 form-control" maxlength="10" placeholder="vd: 20/10/2020">
                   <div class="alert-day_deploy"></div>
                 </div>
               </div>
@@ -111,12 +111,28 @@
                 <label for="staticEmail" class="col-sm-3 col-form-label">Tên web</label>
                 <div class="col-sm-9">
                   <input type="text" name="name" class="form-control" id="edtnametxt" value="">
+                  <div class="alert-name"></div>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="staticEmail" class="col-sm-3 col-form-label">Link</label>
                 <div class="col-sm-9">
                   <input type="text" name="link" class="form-control" id="edtlinktxt" value="">
+                  <div class="alert-link"></div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Link admin</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="edtlinkadmintxt" value="" placeholder="vd: http://gospeedcheck.com/toh-admin">
+                  <div class="alert-link_admin"></div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Ngày deploy</label>
+                <div class="col-sm-9">
+                  <input autocomplete="off" id="edtdaydeploytxt" type="text" class="day_deploy w-100 form-control" maxlength="10" placeholder="vd: 20/10/2020">
+                  <div class="alert-day_deploy"></div>
                 </div>
               </div>
             </form>
@@ -139,7 +155,7 @@
             return this.getTime() === this.getTime();
         };  
 
-        $( "#day_deploy" ).datepicker({
+        $( ".day_deploy" ).datepicker({
             changeMonth: true,
             changeYear: true,
             yearRange: "1970:{{ date('Y') }}",
@@ -157,6 +173,8 @@
           $('.edit-btn').click(function(){
             $('#edtnametxt').val($('#website-' + $(this).attr('data-id')).text());
             $('#edtlinktxt').val($('#website-' + $(this).attr('data-id')).attr('href'));
+            $('#edtlinkadmintxt').val($('#website-' + $(this).attr('data-id')).attr('data-link_admin'));
+            $('#edtdaydeploytxt').val($('#website-' + $(this).attr('data-id')).attr('data-day_deploy'));
             $('#update-btn').attr('data-id', $(this).attr('data-id'));
             $('#editModal').modal('toggle')
           })
@@ -204,35 +222,78 @@
           var object_id = $('#update-btn').attr('data-id');
           var object_name = $('#edtnametxt').val();
           var object_link = $('#edtlinktxt').val();
+          var link_admin = $('#edtlinkadmintxt').val();
+          var day_deploy = $('#edtdaydeploytxt').val();
+          $('.alert-error').html('')
+
+          if (day_deploy == '') {
+              $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
+              return;
+          }
+
+          if (day_deploy == '') {
+              $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
+              return;
+          }
+
+          if (day_deploy != '') {
+              if (dateRegex.test(day_deploy) != true) {
+                $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+                return;
+              } else {
+                  day_deploy_format = day_deploy;
+                  day_deploy = day_deploy.split('/');
+                  day_deploy = day_deploy[2] + '-' + day_deploy[1] + '-' + day_deploy[0]
+
+                  if (new Date(day_deploy).isValidDate() == false) {
+                    $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+                    return;
+                  }
+              }
+          }
 
           $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
+          // alert(day_deploy)
+          $.ajax({
+              url: "{{ url('/') }}/update-website",
+              method: "POST",
+              data: { 
+                id : object_id,
+                name : object_name.trim(),
+                link : object_link.trim(),
+                link_admin : link_admin.trim(),
+                day_deploy : day_deploy.trim(),
+              },
+              beforeSend: function(r, a){
+                  $(".ajax_waiting").addClass("loading");
+              },
+              complete: function() {
+                  $(".ajax_waiting").removeClass("loading");
+              },
+              success: function (obj) {
+                  if(obj.status == 200){
+                    swal("Tuyệt!", "Website đã được cập nhật!", "success");
+                    $('#editModal').modal('toggle')
+                    $('#day_deploy-' + object_id).html(day_deploy_format)
+                    $('#website-' + object_id).text(object_name);
+                    $('#website-' + object_id).attr('href', object_link);
+                    $('#website-' + object_id).attr('data-link_admin', link_admin);
+                    $('#website-' + object_id).attr('data-day_deploy', day_deploy_format);
+                  } else {
+                      $.each(obj.errors, function( index, value ) {
+                          $('.alert-' + index).html(value).addClass('alert-error');
+                      });
+                  }
+              },
+              error: function (data) {
 
-          var request = $.ajax({
-            url: "{{ url('/') }}/update-website",
-            method: "POST",
-            data: { 
-              id : object_id,
-              name : object_name,
-              link : object_link,
-            },
-            dataType: "json"
+              }
           });
-          
-          request.done(function( msg ) {
-            $('#emailModel').modal('toggle')
-            swal("Tuyệt!", "Website đã được cập nhật!", "success");
-            $('#editModal').modal('toggle')
-            $('#website-' + object_id).text(object_name);
-            $('#website-' + object_id).attr('href', object_link);
-          });
-          
-          request.fail(function( jqXHR, textStatus ) {
-            alert( "Request failed: " + textStatus );
-          });
+
         })
 
         function clearForm() {
@@ -245,7 +306,7 @@
           var object_name = $('#nametxt').val();
           var object_link = $('#linktxt').val();
           var link_admin = $('#link_admin').val();
-          var day_deploy = $('#day_deploy').val();
+          var day_deploy = $('#createModel .day_deploy').val();
 
           if (object_name == '') {
               $('.alert-name').html('Tên web không được để trống!').addClass('alert-error');
@@ -267,6 +328,7 @@
                 $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
                 return;
               } else {
+                  day_deploy_format = day_deploy
                   day_deploy = day_deploy.split('/');
                   day_deploy = day_deploy[2] + '-' + day_deploy[1] + '-' + day_deploy[0]
 
@@ -300,16 +362,6 @@
               },
               success: function (obj) {
                   if(obj.status == 200){
-                    // swal({
-                    //   // title: "Are you sure?",
-                    //   text: "Thêm mới website thành công!",
-                    //   icon: "success",
-                    //   buttons: true,
-                    //   // dangerMode: true,
-                    // })
-                    // .then((willDelete) => {
-                    //   location.reload();
-                    // });
                       $html = '';
                       if(obj.status_website == 1){
                         $html = '<tr class="table-success">';
@@ -317,14 +369,14 @@
                         $html = '<tr class="table-danger">';
                       }
 
-                        $html += '<td><a id="website-'+obj.id_website+'" href="'+obj.link_website+'">'+obj.name_website+'</a></td>';
-                        $html += '<td class="text-center">'+obj.day_deploy+'</td>';
+                        $html += '<td><a id="website-'+obj.id_website+'" href="'+obj.link_website+'" data-link_admin="'+obj.link_admin+'" data-day_deploy="'+obj.day_deploy_format+'">'+obj.name_website+'</a></td>';
+                        $html += '<td class="text-center">'+obj.day_deploy_format+'</td>';
                         $html += '<td class="text-center">'
                           $html += '<div class="list-group-item-cs item-'+obj.id_website+'">'
                             if(obj.link_admin != null){
                               $html += '<a style="color: #fff" class="btn-sm btn btn-info" href="'+obj.link_admin+'" target="_blank"><i class="fa fa-adn" aria-hidden="true"></i> Go Admin</a>';
                             }
-                            $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary" href="#" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
+                            $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary" href="/statistical/web='+ obj.link_website +'" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
                             $html += ' <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="'+obj.id_website+'"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</button>'
                             $html += ' <button type="button" class="btn-sm btn btn-danger remove-btn" data-id="'+obj.id_website+'"><i class="fa fa-times" aria-hidden="true"></i> Xóa</button>';
                           $html += '</div>';
