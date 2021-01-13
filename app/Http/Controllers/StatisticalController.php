@@ -9,7 +9,12 @@ class StatisticalController extends Controller
 {
     public function getInfoGitPullNearest(Request $request){
         $data = exec('cd /var/www/html/checkSystem/ && stat -c %y .git/FETCH_HEAD', $output);
-        return substr($data, 0, 19);
+        
+        if (strlen($data) > 2) {
+            return substr($data, 0, 19);
+        }
+
+        return '';
     }
 
     public function show(Request $request){
