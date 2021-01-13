@@ -7,6 +7,13 @@ use App\Statistical;
 
 class StatisticalController extends Controller
 {
+    public function getInfoGitPullNearest(Request $request){
+        $data = exec('stat -c %y .git/FETCH_HEAD');
+        dd($data);
+        $jsonData = json_decode($data, false);
+        return view('statistical.index', compact('data'));
+    }
+
     public function show(Request $request){
         $type = $request->type;
         $type = $type > 0 ? $type : 1;

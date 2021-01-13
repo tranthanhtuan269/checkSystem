@@ -29,3 +29,4 @@ Route::get('/test', 'HomeController@test');
 
 Route::get('statistical', 'StatisticalController@show')->name('client.show-statistical');
 Route::get('get-data-ajax-highchart','StatisticalController@getDataAjaxHighchart')->name('client.highchart');
+Route::get('get-info-git-pull-nearest','StatisticalController@getInfoGitPullNearest')->name('client.get-info-git-pull-nearest');
