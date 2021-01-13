@@ -73,8 +73,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="save-btn">Save</button>
+            <button type="button" class="btn btn-primary" id="save-btn">Lưu</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
           </div>
         </div>
       </div>
@@ -101,8 +101,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="update-btn">Save</button>
+            <button type="button" class="btn btn-primary" id="update-btn"> Lưu </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
           </div>
         </div>
       </div>
