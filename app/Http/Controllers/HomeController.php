@@ -55,8 +55,8 @@ class HomeController extends Controller
             if (strpos($request->link, 'http') === false) {
                 $request->link = 'http://' . $request->link;
             }
-
-            if (strpos($request->link_admin, 'http') === false) {
+            
+            if (!empty($request->link_admin) && strpos($request->link_admin, 'http') === false) {
                 $request->link_admin = 'http://' . $request->link_admin;
             }
 
@@ -140,7 +140,7 @@ class HomeController extends Controller
                 $request->link = 'http://' . $request->link;
             }
 
-            if (strpos($request->link_admin, 'http') === false) {
+            if (!empty($request->link_admin) && strpos($request->link_admin, 'http') === false) {
                 $request->link_admin = 'http://' . $request->link_admin;
             }
             // dd($request->link);
