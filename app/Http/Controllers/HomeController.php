@@ -22,6 +22,13 @@ class HomeController extends Controller
                 $website->status = 0;
             }
             
+            $day_deploy_nearest = @file_get_contents($website->link . '/get-info-git-pull-nearest');
+
+            if ($day_deploy_nearest == false) {
+                $day_deploy_nearest = null;
+            }
+
+            $website->day_deploy = $day_deploy_nearest;
             $website->save();
         }
         
@@ -62,6 +69,10 @@ class HomeController extends Controller
 
             $day_deploy_nearest = @file_get_contents($request->link . '/get-info-git-pull-nearest');
 
+            if ($day_deploy_nearest == false) {
+                $day_deploy_nearest = null;
+            }
+     
             $website = new Website;
             $website->name = $request->name;
             $website->link = $request->link;
@@ -76,7 +87,7 @@ class HomeController extends Controller
                 'id_website' => $website->id,
                 'name_website' => $website->name,
                 'link_website' => $website->link,
-                'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('Y-m-d H:i:s'),
+                'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('d/m/Y H:i:s'),
                 'link_admin' => $website->link_admin,
                 'status_website' => $website->status,
             ]);

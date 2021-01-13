@@ -12,7 +12,7 @@
         <thead>
           <tr>
             <th class="text-center">Tên web</th>
-            <th class="text-center">Ngày deploy</th>
+            <th class="text-center">Ngày deploy gần nhất</th>
             <th class="text-center">Thao tác</th>
           </tr>
         </thead>
@@ -20,7 +20,7 @@
           @foreach($websites as $website)
             <tr class="{{ $website->status == 1 ? 'table-success' : 'table-danger' }}">
               <td> <a id="website-{{ $website->id }}" href="{{ $website->link }}" data-link_admin="{{ $website->link_admin }}" data-day_deploy="{{ \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y') }}">{{ $website->name }}</a></td>
-              <td class="text-center" id="day_deploy-{{ $website->id }}">{{ \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y') }}</td>
+              <td class="text-center" id="day_deploy-{{ $website->id }}">{{ empty($website->day_deploy) ? '' : \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y H:i:s') }}</td>
               <td class="text-center">
                 <div class="list-group-item-cs item-{{ $website->id }}">
                   @if (!empty($website->link_admin))
@@ -221,10 +221,18 @@
         $('#update-btn').click(function(){
           var object_id = $('#update-btn').attr('data-id');
           var object_name = $('#edtnametxt').val();
-          var object_link = $('#edtlinktxt').val();
+          var link = $('#edtlinktxt').val();
           var link_admin = $('#edtlinkadmintxt').val();
           // var day_deploy = $('#edtdaydeploytxt').val();
           $('.alert-error').html('')
+
+          if (link.slice(-1) == '/') {
+            link = link.slice(0, -1)
+          }
+
+          if (link_admin.slice(-1) == '/') {
+            link_admin = link_admin.slice(0, -1)
+          }
 
           // if (day_deploy == '') {
           //     $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
@@ -264,7 +272,7 @@
               data: { 
                 id : object_id,
                 name : object_name.trim(),
-                link : object_link.trim(),
+                link : link.trim(),
                 link_admin : link_admin.trim(),
                 // day_deploy : day_deploy.trim(),
               },
@@ -280,7 +288,7 @@
                     $('#editModal').modal('toggle')
                     // $('#day_deploy-' + object_id).html(day_deploy_format)
                     $('#website-' + object_id).text(object_name);
-                    $('#website-' + object_id).attr('href', object_link);
+                    $('#website-' + object_id).attr('href', link);
                     $('#website-' + object_id).attr('data-link_admin', link_admin);
                     // $('#website-' + object_id).attr('data-day_deploy', day_deploy_format);
                   } else {
@@ -304,7 +312,7 @@
         $('#save-btn').click(function(){
           $('.alert-error').html('')
           var object_name = $('#nametxt').val();
-          var object_link = $('#linktxt').val();
+          var link = $('#linktxt').val();
           var link_admin = $('#link_admin').val();
           // var day_deploy = $('#createModel .day_deploy').val();
 
@@ -313,11 +321,19 @@
               return;
           }
 
-          if (object_link == '') {
+          if (link == '') {
               $('.alert-link').html('Link không được để trống!').addClass('alert-error');
               return;
           }
 
+          if (link.slice(-1) == '/') {
+            link = link.slice(0, -1)
+          }
+
+          if (link_admin.slice(-1) == '/') {
+            link_admin = link_admin.slice(0, -1)
+          }
+          
           // if (day_deploy == '') {
           //     $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
           //     return;
@@ -349,7 +365,7 @@
               url: "{{ url('/') }}/add-website",
               data: { 
                 name : object_name.trim(),
-                link : object_link.trim(),
+                link : link.trim(),
                 link_admin : link_admin.trim(),
                 // day_deploy : day_deploy.trim(),
               },
@@ -369,8 +385,8 @@
                         $html = '<tr class="table-danger">';
                       }
 
-                        $html += '<td><a id="website-'+obj.id_website+'" href="'+obj.link_website+'" data-link_admin="'+obj.link_admin+'" data-day_deploy="'+obj.day_deploy_format+'">'+obj.name_website+'</a></td>';
-                        $html += '<td class="text-center">'+obj.day_deploy_format+'</td>';
+                        $html += '<td><a id="website-'+obj.id_website+'" href="'+obj.link_website+'" data-link_admin="'+obj.link_admin+'">'+obj.name_website+'</a></td>';
+                        $html += '<td class="text-center">'+obj.day_deploy+'</td>';
                         $html += '<td class="text-center">'
                           $html += '<div class="list-group-item-cs item-'+obj.id_website+'">'
                             if(obj.link_admin != null){
