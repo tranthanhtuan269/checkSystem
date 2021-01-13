@@ -78,13 +78,13 @@
                   <div class="alert-link_admin"></div>
                 </div>
               </div>
-              <div class="form-group row">
+              {{-- <div class="form-group row">
                 <label for="staticEmail" class="col-sm-3 col-form-label">Ngày deploy</label>
                 <div class="col-sm-9">
                   <input autocomplete="off" type="text" class="day_deploy w-100 form-control" maxlength="10" placeholder="vd: 20/10/2020">
                   <div class="alert-day_deploy"></div>
                 </div>
-              </div>
+              </div> --}}
             </form>
           </div>
           <div class="modal-footer">
@@ -128,13 +128,13 @@
                   <div class="alert-link_admin"></div>
                 </div>
               </div>
-              <div class="form-group row">
+              {{-- <div class="form-group row">
                 <label for="staticEmail" class="col-sm-3 col-form-label">Ngày deploy</label>
                 <div class="col-sm-9">
                   <input autocomplete="off" id="edtdaydeploytxt" type="text" class="day_deploy w-100 form-control" maxlength="10" placeholder="vd: 20/10/2020">
                   <div class="alert-day_deploy"></div>
                 </div>
-              </div>
+              </div> --}}
             </form>
           </div>
           <div class="modal-footer">
@@ -148,20 +148,20 @@
     <script>
       $(document).ready(function(){
 
-        var dateRegex = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-.\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;            Date.prototype.isValidDate = function () {
-            return this.getTime() === this.getTime();
-        };  
-        Date.prototype.isValidDate = function () {
-            return this.getTime() === this.getTime();
-        };  
+        // var dateRegex = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-.\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;            Date.prototype.isValidDate = function () {
+        //     return this.getTime() === this.getTime();
+        // };  
+        // Date.prototype.isValidDate = function () {
+        //     return this.getTime() === this.getTime();
+        // };  
 
-        $( ".day_deploy" ).datepicker({
-            changeMonth: true,
-            changeYear: true,
-            yearRange: "1970:{{ date('Y') }}",
-            dateFormat: 'dd/mm/yy',
-            maxDate : new Date(),
-        } );
+        // $( ".day_deploy" ).datepicker({
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     yearRange: "1970:{{ date('Y') }}",
+        //     dateFormat: 'dd/mm/yy',
+        //     maxDate : new Date(),
+        // } );
 
         $("#createModel").on("hidden.bs.modal", function () {
           clearForm()
@@ -223,34 +223,34 @@
           var object_name = $('#edtnametxt').val();
           var object_link = $('#edtlinktxt').val();
           var link_admin = $('#edtlinkadmintxt').val();
-          var day_deploy = $('#edtdaydeploytxt').val();
+          // var day_deploy = $('#edtdaydeploytxt').val();
           $('.alert-error').html('')
 
-          if (day_deploy == '') {
-              $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
-              return;
-          }
+          // if (day_deploy == '') {
+          //     $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
+          //     return;
+          // }
 
-          if (day_deploy == '') {
-              $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
-              return;
-          }
+          // if (day_deploy == '') {
+          //     $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
+          //     return;
+          // }
 
-          if (day_deploy != '') {
-              if (dateRegex.test(day_deploy) != true) {
-                $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
-                return;
-              } else {
-                  day_deploy_format = day_deploy;
-                  day_deploy = day_deploy.split('/');
-                  day_deploy = day_deploy[2] + '-' + day_deploy[1] + '-' + day_deploy[0]
+          // if (day_deploy != '') {
+          //     if (dateRegex.test(day_deploy) != true) {
+          //       $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+          //       return;
+          //     } else {
+          //         day_deploy_format = day_deploy;
+          //         day_deploy = day_deploy.split('/');
+          //         day_deploy = day_deploy[2] + '-' + day_deploy[1] + '-' + day_deploy[0]
 
-                  if (new Date(day_deploy).isValidDate() == false) {
-                    $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
-                    return;
-                  }
-              }
-          }
+          //         if (new Date(day_deploy).isValidDate() == false) {
+          //           $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+          //           return;
+          //         }
+          //     }
+          // }
 
           $.ajaxSetup({
               headers: {
@@ -266,7 +266,7 @@
                 name : object_name.trim(),
                 link : object_link.trim(),
                 link_admin : link_admin.trim(),
-                day_deploy : day_deploy.trim(),
+                // day_deploy : day_deploy.trim(),
               },
               beforeSend: function(r, a){
                   $(".ajax_waiting").addClass("loading");
@@ -278,11 +278,11 @@
                   if(obj.status == 200){
                     swal("Tuyệt!", "Website đã được cập nhật!", "success");
                     $('#editModal').modal('toggle')
-                    $('#day_deploy-' + object_id).html(day_deploy_format)
+                    // $('#day_deploy-' + object_id).html(day_deploy_format)
                     $('#website-' + object_id).text(object_name);
                     $('#website-' + object_id).attr('href', object_link);
                     $('#website-' + object_id).attr('data-link_admin', link_admin);
-                    $('#website-' + object_id).attr('data-day_deploy', day_deploy_format);
+                    // $('#website-' + object_id).attr('data-day_deploy', day_deploy_format);
                   } else {
                       $.each(obj.errors, function( index, value ) {
                           $('.alert-' + index).html(value).addClass('alert-error');
@@ -306,7 +306,7 @@
           var object_name = $('#nametxt').val();
           var object_link = $('#linktxt').val();
           var link_admin = $('#link_admin').val();
-          var day_deploy = $('#createModel .day_deploy').val();
+          // var day_deploy = $('#createModel .day_deploy').val();
 
           if (object_name == '') {
               $('.alert-name').html('Tên web không được để trống!').addClass('alert-error');
@@ -318,26 +318,26 @@
               return;
           }
 
-          if (day_deploy == '') {
-              $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
-              return;
-          }
+          // if (day_deploy == '') {
+          //     $('.alert-day_deploy').html('Ngày deploy không được để trống!').addClass('alert-error');
+          //     return;
+          // }
 
-          if (day_deploy != '') {
-              if (dateRegex.test(day_deploy) != true) {
-                $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
-                return;
-              } else {
-                  day_deploy_format = day_deploy
-                  day_deploy = day_deploy.split('/');
-                  day_deploy = day_deploy[2] + '-' + day_deploy[1] + '-' + day_deploy[0]
+          // if (day_deploy != '') {
+          //     if (dateRegex.test(day_deploy) != true) {
+          //       $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+          //       return;
+          //     } else {
+          //         day_deploy_format = day_deploy
+          //         day_deploy = day_deploy.split('/');
+          //         day_deploy = day_deploy[2] + '-' + day_deploy[1] + '-' + day_deploy[0]
 
-                  if (new Date(day_deploy).isValidDate() == false) {
-                    $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
-                    return;
-                  }
-              }
-          }
+          //         if (new Date(day_deploy).isValidDate() == false) {
+          //           $('.alert-day_deploy').html('Xin vui lòng nhập ngày deploy hợp lệ!').addClass('alert-error');
+          //           return;
+          //         }
+          //     }
+          // }
 
           $.ajaxSetup({
               headers: {
@@ -351,7 +351,7 @@
                 name : object_name.trim(),
                 link : object_link.trim(),
                 link_admin : link_admin.trim(),
-                day_deploy : day_deploy.trim(),
+                // day_deploy : day_deploy.trim(),
               },
               dataType:'json',
               beforeSend: function(r, a){

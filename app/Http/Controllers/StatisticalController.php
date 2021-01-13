@@ -8,10 +8,8 @@ use App\Statistical;
 class StatisticalController extends Controller
 {
     public function getInfoGitPullNearest(Request $request){
-        $data = exec('stat -c %y .git/FETCH_HEAD');
-        dd($data);
-        $jsonData = json_decode($data, false);
-        return view('statistical.index', compact('data'));
+        $data = exec('cd /var/www/html/checkSystem/ && stat -c %y .git/FETCH_HEAD', $output);
+        return substr($data, 0, 19);
     }
 
     public function show(Request $request){

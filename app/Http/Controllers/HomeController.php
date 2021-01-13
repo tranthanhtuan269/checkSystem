@@ -42,7 +42,7 @@ class HomeController extends Controller
         $rules = [
             'name'          => 'required|max:255|unique:websites,name',
             'link'          => 'required',
-            'day_deploy'          => 'required',
+            // 'day_deploy'          => 'required',
         ];
         $messages = [];
         $validator = \Validator::make($request->all(), $rules, $messages);
@@ -60,11 +60,13 @@ class HomeController extends Controller
                 $request->link_admin = 'http://' . $request->link_admin;
             }
 
+            $day_deploy_nearest = @file_get_contents($request->link . '/get-info-git-pull-nearest');
+
             $website = new Website;
             $website->name = $request->name;
             $website->link = $request->link;
             $website->link_admin = $request->link_admin;
-            $website->day_deploy = $request->day_deploy;
+            $website->day_deploy = $day_deploy_nearest;
             $website->status = Helper::http_response($website->link);
             $website->save();
     
@@ -74,7 +76,7 @@ class HomeController extends Controller
                 'id_website' => $website->id,
                 'name_website' => $website->name,
                 'link_website' => $website->link,
-                'day_deploy' => $website->day_deploy,
+                'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('Y-m-d H:i:s'),
                 'link_admin' => $website->link_admin,
                 'status_website' => $website->status,
             ]);
@@ -125,7 +127,7 @@ class HomeController extends Controller
         $rules = [
             'name'          => 'required|max:255|unique:websites,name,'.$request->id,
             'link'          => 'required',
-            'day_deploy'          => 'required',
+            // 'day_deploy'          => 'required',
         ];
         $messages = [];
         $validator = \Validator::make($request->all(), $rules, $messages);
@@ -150,7 +152,7 @@ class HomeController extends Controller
                 $website->name = $request->name;
                 $website->link = $request->link;
                 $website->link_admin = $request->link_admin;
-                $website->day_deploy = $request->day_deploy;
+                // $website->day_deploy = $request->day_deploy;
                 $website->save();
             }
     
