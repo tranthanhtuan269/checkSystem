@@ -48,7 +48,7 @@ class HomeController extends Controller
     public function addWeb(Request $request){
         $rules = [
             'name'          => 'required|max:255|unique:websites,name',
-            'link'          => 'required',
+            'link'          => 'required|unique:websites,link',
             // 'day_deploy'          => 'required',
         ];
         $messages = [];
@@ -88,56 +88,16 @@ class HomeController extends Controller
                 'name_website' => $website->name,
                 'link_website' => $website->link,
                 'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('d/m/Y H:i:s'),
-                'link_admin' => $website->link_admin,
+                'link_admin' => $request->link_admin,
                 'status_website' => $website->status,
             ]);
         }
     }
 
-    public function addEmail(Request $request){
-        $email = new Email;
-        $email->email = $request->email;
-        $email->save();
-
-        return response()->json([
-            'message' => 'OK',
-            'status' => '201',
-            'id' => $email->id,
-            'email' => $email->email,
-        ]);
-    }
-
-    public function updateEmail(Request $request){
-        $email = Email::find($request->id);
-        if($email){
-            $email->email = $request->email;
-            $email->save();
-        }
-
-        return response()->json([
-            'message' => 'OK',
-            'status' => '201',
-        ]);
-    }
-
-    public function saveConfig(Request $request){
-        $config = Config::where('key', 'interval')->first();
-        if($config){
-            $config->value = $request->setting;
-            $config->updated_at = date("Y/m/d H:i:s");
-            $config->save();
-        }
-
-        return response()->json([
-            'message' => 'OK',
-            'status' => '201',
-        ]);
-    }
-
     public function updateWebsite(Request $request){
         $rules = [
             'name'          => 'required|max:255|unique:websites,name,'.$request->id,
-            'link'          => 'required',
+            'link'          => 'required|unique:websites,link,'.$request->id,
             // 'day_deploy'          => 'required',
         ];
         $messages = [];
@@ -174,6 +134,69 @@ class HomeController extends Controller
         }
     }
 
+    public function addEmail(Request $request){
+        $rules = [
+            'email'          => 'required|max:255|regex_email:"/^[_a-zA-Z0-9-]{2,}+(\.[_a-zA-Z0-9-]{2,}+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,3})$/"|unique:emails,email',
+        ];
+        $messages = [];
+        $validator = \Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '404',
+                'errors' =>  $validator->errors(),
+            ]);
+        } else {
+            $email = new Email;
+            $email->email = $request->email;
+            $email->save();
+    
+            return response()->json([
+                'message' => 'OK',
+                'status' => '200',
+                'id' => $email->id,
+                'email' => $email->email,
+            ]);
+        }
+    }
+
+    public function updateEmail(Request $request){
+        $rules = [
+            'email'          => 'required|max:255|regex_email:"/^[_a-zA-Z0-9-]{2,}+(\.[_a-zA-Z0-9-]{2,}+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,3})$/"|unique:emails,email,'.$request->id,
+        ];
+        $messages = [];
+        $validator = \Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '404',
+                'errors' =>  $validator->errors(),
+            ]);
+        } else {
+            $email = Email::find($request->id);
+            if($email){
+                $email->email = $request->email;
+                $email->save();
+            }
+    
+            return response()->json([
+                'message' => 'OK',
+                'status' => '200',
+            ]);
+        }
+    }
+
+    public function saveConfig(Request $request){
+        $config = Config::where('key', 'interval')->first();
+        if($config){
+            $config->value = $request->setting;
+            $config->updated_at = date("Y/m/d H:i:s");
+            $config->save();
+        }
+
+        return response()->json([
+            'message' => 'OK',
+            'status' => '201',
+        ]);
+    }
     public function removeEmail(Request $request){
         $email = Email::find($request->id);
         if($email){

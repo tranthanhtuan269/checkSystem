@@ -2,7 +2,7 @@
 @section('content')
     <div class="clearfix mb-3">
       <div class="float-right">
-        <button type="button" class="btn-sm btn btn-primary" data-toggle="modal" data-target="#createModel">
+        <button type="button" class="btn-sm btn btn-primary" data-toggle="modal" data-target="#createModal">
           <i class="fa fa-plus-square" aria-hidden="true"></i> Thêm mới website
         </button>
       </div>
@@ -23,12 +23,10 @@
               <td class="text-center" id="day_deploy-{{ $website->id }}">{{ empty($website->day_deploy) ? '' : \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y H:i:s') }}</td>
               <td class="text-center">
                 <div class="list-group-item-cs item-{{ $website->id }}">
-                  @if (!empty($website->link_admin))
-                    <a style="color: #fff" class="btn-sm btn btn-info" href="{{ $website->link_admin }}" target="_blank">
-                      <i class="fa fa-adn" aria-hidden="true"></i> Go Admin
-                    </a>
-                  @endif
-                  <a style="color: #fff" class="btn-sm btn btn-secondary" href="{{ route('client.show-statistical') }}?web={{ $website->link }}" target="_blank">
+                  <a style="color: #fff" class="btn-sm btn btn-info btn-link-admin @if (empty($website->link_admin)) d-none @endif" href="{{ $website->link_admin }}" target="_blank">
+                    <i class="fa fa-adn" aria-hidden="true"></i> Go Admin
+                  </a>
+                  <a style="color: #fff" class="btn-sm btn btn-secondary btn-statistical" href="{{ route('client.show-statistical') }}?web={{ $website->name }}&domain={{ $website->link }}" target="_blank">
                     <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
                   </a>
                   <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="{{ $website->id }}">
@@ -46,7 +44,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="createModel" tabindex="-1" role="dialog" aria-labelledby="emailModelLabel" aria-hidden="true">
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="emailModelLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header text-center">
@@ -163,7 +161,7 @@
         //     maxDate : new Date(),
         // } );
 
-        $("#createModel").on("hidden.bs.modal", function () {
+        $("#createModal, #editModal").on("hidden.bs.modal", function () {
           clearForm()
         });
 
@@ -230,6 +228,10 @@
             link = link.slice(0, -1)
           }
 
+          if (link.indexOf('http') === -1) {
+            link = 'http://' + link;
+          }
+          // alert(link)
           if (link_admin.slice(-1) == '/') {
             link_admin = link_admin.slice(0, -1)
           }
@@ -265,7 +267,7 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          // alert(day_deploy)
+
           $.ajax({
               url: "{{ url('/') }}/update-website",
               method: "POST",
@@ -290,6 +292,18 @@
                     $('#website-' + object_id).text(object_name);
                     $('#website-' + object_id).attr('href', link);
                     $('#website-' + object_id).attr('data-link_admin', link_admin);
+
+
+                    if (link_admin != '') {
+                      if (link_admin.indexOf('http') === -1) {
+                        link_admin = 'http://' + link_admin;
+                      }
+                      $('.item-'+ object_id +' .btn-link-admin').attr('href', link_admin).removeClass('d-none')
+                    } else {
+                      $('.item-'+ object_id +' .btn-link-admin').addClass('d-none')
+                    }
+
+                    $('.item-'+ object_id +' .btn-statistical').attr('href', '/statistical?web='+ object_name +'&domain='+ link +'').removeClass('d-none')
                     // $('#website-' + object_id).attr('data-day_deploy', day_deploy_format);
                   } else {
                       $.each(obj.errors, function( index, value ) {
@@ -306,7 +320,7 @@
 
         function clearForm() {
           $('.alert-error').html('')
-          $('#createModel input').val('');
+          $('#createModal input').val('');
         }
 
         $('#save-btn').click(function(){
@@ -314,7 +328,7 @@
           var object_name = $('#nametxt').val();
           var link = $('#linktxt').val();
           var link_admin = $('#link_admin').val();
-          // var day_deploy = $('#createModel .day_deploy').val();
+          // var day_deploy = $('#createModal .day_deploy').val();
 
           if (object_name == '') {
               $('.alert-name').html('Tên web không được để trống!').addClass('alert-error');
@@ -328,6 +342,10 @@
 
           if (link.slice(-1) == '/') {
             link = link.slice(0, -1)
+          }
+
+          if (link.indexOf('http') === -1) {
+            link = 'http://' + link;
           }
 
           if (link_admin.slice(-1) == '/') {
@@ -385,14 +403,20 @@
                         $html = '<tr class="table-danger">';
                       }
 
-                        $html += '<td><a id="website-'+obj.id_website+'" href="'+obj.link_website+'" data-link_admin="'+obj.link_admin+'">'+obj.name_website+'</a></td>';
+                      if(obj.link_admin == null){
+                        link_admin= '';
+                      }else{
+                        link_admin = obj.link_admin;
+                      }
+
+                        $html += '<td><a id="website-'+obj.id_website+'" href="'+obj.link_website+'" data-link_admin="'+link_admin+'">'+obj.name_website+'</a></td>';
                         $html += '<td class="text-center">'+obj.day_deploy+'</td>';
                         $html += '<td class="text-center">'
                           $html += '<div class="list-group-item-cs item-'+obj.id_website+'">'
-                            if(obj.link_admin != null){
-                              $html += '<a style="color: #fff" class="btn-sm btn btn-info" href="'+obj.link_admin+'" target="_blank"><i class="fa fa-adn" aria-hidden="true"></i> Go Admin</a>';
+                            if(link_admin != ''){
+                              $html += '<a style="color: #fff" class="btn-sm btn btn-info btn-link-admin" href="'+link_admin+'" target="_blank"><i class="fa fa-adn" aria-hidden="true"></i> Go Admin</a>';
                             }
-                            $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary" href="/statistical?web='+ obj.link_website +'" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
+                            $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary btn-statistical" href="/statistical?web='+ obj.name_website +'&domain='+ obj.link_website +'" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
                             $html += ' <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="'+obj.id_website+'"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</button>'
                             $html += ' <button type="button" class="btn-sm btn btn-danger remove-btn" data-id="'+obj.id_website+'"><i class="fa fa-times" aria-hidden="true"></i> Xóa</button>';
                           $html += '</div>';
@@ -400,7 +424,7 @@
                       $html += '</tr>';
                     $('.list-website tbody').append($html);
                     clearForm();
-                    $('#createModel').modal('toggle');
+                    $('#createModal').modal('toggle');
                     action();
                   } else {
                       $.each(obj.errors, function( index, value ) {

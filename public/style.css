@@ -1,6 +1,15 @@
 .list-group-item.active a{
     color: #fff;
 }
+*:focus {
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+} 
+.swal-button{
+    box-shadow: none !important;
+    outline: none !important;
+}
 .alert-error{
 	font-style: italic;
     padding-top: 3px;

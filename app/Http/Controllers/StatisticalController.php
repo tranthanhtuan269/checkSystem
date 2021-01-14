@@ -20,7 +20,7 @@ class StatisticalController extends Controller
     public function show(Request $request){
         $type = $request->type;
         $type = $type > 0 ? $type : 1;
-        $domain = $request->web;
+        $domain = $request->domain;
         $domain = str_replace("https://", "", $domain);
         $domain = str_replace("http://", "", $domain);
         $domain = str_replace("https", "", $domain);

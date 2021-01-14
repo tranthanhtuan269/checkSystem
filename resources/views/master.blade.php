@@ -29,9 +29,9 @@
       <div class="row">
         <div class="col-md-3">
           <ul class="list-group">
-            <li class="list-group-item active"><a href="{{ url('/') }}">Quản lý website</a></li>
-            <li class="list-group-item"><a href="{{ url('/emails') }}">Quản lý Email</a></li>
-            <li class="list-group-item"><a href="{{ url('/settings') }}">Quản lý Cấu hình</a></li>
+            <li class="list-group-item @if(Request::is('/')) active @endif"><a href="{{ url('/') }}">Quản lý website</a></li>
+            <li class="list-group-item @if(Request::is('emails')) active @endif" ><a href="{{ url('/emails') }}">Quản lý Email</a></li>
+            <li class="list-group-item @if(Request::is('settings')) active @endif"><a href="{{ url('/settings') }}">Quản lý Cấu hình</a></li>
           </ul>
         </div>
         <div class="col-md-9">
