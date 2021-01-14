@@ -224,11 +224,11 @@
           // var day_deploy = $('#edtdaydeploytxt').val();
           $('.alert-error').html('')
 
-          if (link.slice(-1) == '/') {
+          if (link != '' && link.slice(-1) == '/') {
             link = link.slice(0, -1)
           }
 
-          if (link.indexOf('http') === -1) {
+          if (link != '' && link.indexOf('http') === -1) {
             link = 'http://' + link;
           }
           // alert(link)
@@ -340,11 +340,11 @@
           //     return;
           // }
 
-          if (link.slice(-1) == '/') {
+          if (link != '' && link.slice(-1) == '/') {
             link = link.slice(0, -1)
           }
 
-          if (link.indexOf('http') === -1) {
+          if (link != '' && link.indexOf('http') === -1) {
             link = 'http://' + link;
           }
 
