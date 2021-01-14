@@ -330,15 +330,15 @@
           var link_admin = $('#link_admin').val();
           // var day_deploy = $('#createModal .day_deploy').val();
 
-          if (object_name == '') {
-              $('.alert-name').html('Tên web không được để trống!').addClass('alert-error');
-              return;
-          }
+          // if (object_name == '') {
+          //     $('.alert-name').html('Tên web không được để trống!').addClass('alert-error');
+          //     return;
+          // }
 
-          if (link == '') {
-              $('.alert-link').html('Link không được để trống!').addClass('alert-error');
-              return;
-          }
+          // if (link == '') {
+          //     $('.alert-link').html('Link không được để trống!').addClass('alert-error');
+          //     return;
+          // }
 
           if (link.slice(-1) == '/') {
             link = link.slice(0, -1)
