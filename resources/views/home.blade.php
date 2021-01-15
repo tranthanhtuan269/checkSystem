@@ -413,9 +413,8 @@
                         $html += '<td class="text-center">'+obj.day_deploy+'</td>';
                         $html += '<td class="text-center">'
                           $html += '<div class="list-group-item-cs item-'+obj.id_website+'">'
-                            if(link_admin != ''){
-                              $html += '<a style="color: #fff" class="btn-sm btn btn-info btn-link-admin" href="'+link_admin+'" target="_blank"><i class="fa fa-adn" aria-hidden="true"></i> Go Admin</a>';
-                            }
+                            $class_d_none = link_admin != ''? '' : 'd-none'
+                            $html += '<a style="color: #fff" class="btn-sm btn btn-info btn-link-admin '+ $class_d_none +'" href="'+link_admin+'" target="_blank"><i class="fa fa-adn" aria-hidden="true"></i> Go Admin</a>';
                             $html += ' <a style="color: #fff" class="btn-sm btn btn-secondary btn-statistical" href="/statistical?web='+ obj.name_website +'&domain='+ obj.link_website +'" target="_blank"><i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê</a>';
                             $html += ' <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="'+obj.id_website+'"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</button>'
                             $html += ' <button type="button" class="btn-sm btn btn-danger remove-btn" data-id="'+obj.id_website+'"><i class="fa fa-times" aria-hidden="true"></i> Xóa</button>';
