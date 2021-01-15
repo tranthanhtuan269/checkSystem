@@ -12,7 +12,7 @@ use App\Helper\Helper;
 class HomeController extends Controller
 {
     public function index(){
-        $websites = Website::get();
+        $websites = Website::orderBy('id', 'DESC')->paginate(5);
         $obj_email = Email::first();
 
         foreach($websites as $website){
@@ -67,29 +67,30 @@ class HomeController extends Controller
                 $request->link_admin = 'http://' . $request->link_admin;
             }
 
-            $day_deploy_nearest = @file_get_contents($request->link . '/get-info-git-pull-nearest');
+            // $day_deploy_nearest = @file_get_contents($request->link . '/get-info-git-pull-nearest');
 
-            if ($day_deploy_nearest == false) {
-                $day_deploy_nearest = null;
-            }
+            // if ($day_deploy_nearest == false) {
+            //     $day_deploy_nearest = null;
+            // }
      
             $website = new Website;
             $website->name = $request->name;
             $website->link = $request->link;
             $website->link_admin = $request->link_admin;
-            $website->day_deploy = $day_deploy_nearest;
-            $website->status = Helper::http_response($website->link);
+            $website->day_deploy = null;
+            // $website->day_deploy = $day_deploy_nearest;
+            // $website->status = Helper::http_response($website->link);
             $website->save();
     
             return response()->json([
                 'message' => 'OK',
                 'status' => '200',
-                'id_website' => $website->id,
-                'name_website' => $website->name,
-                'link_website' => $website->link,
-                'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('d/m/Y H:i:s'),
-                'link_admin' => $request->link_admin,
-                'status_website' => $website->status,
+                // 'id_website' => $website->id,
+                // 'name_website' => $website->name,
+                // 'link_website' => $website->link,
+                // 'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('d/m/Y H:i:s'),
+                // 'link_admin' => $request->link_admin,
+                // 'status_website' => $website->status,
             ]);
         }
     }
@@ -119,26 +120,26 @@ class HomeController extends Controller
             // dd($request->link);
             $website = Website::find($request->id);
 
-            $day_deploy_nearest = @file_get_contents($request->link . '/get-info-git-pull-nearest');
+            // $day_deploy_nearest = @file_get_contents($request->link . '/get-info-git-pull-nearest');
 
-            if ($day_deploy_nearest == false) {
-                $day_deploy_nearest = null;
-            }
+            // if ($day_deploy_nearest == false) {
+            //     $day_deploy_nearest = null;
+            // }
 
             if($website){
                 $website->name = $request->name;
                 $website->link = $request->link;
                 $website->link_admin = $request->link_admin;
-                $website->day_deploy = $day_deploy_nearest;
-                $website->status = Helper::http_response($request->link);
+                // $website->day_deploy = $day_deploy_nearest;
+                // $website->status = Helper::http_response($request->link);
                 $website->save();
             }
     
             return response()->json([
                 'message' => 'OK',
                 'status' => '200',
-                'status_website' => $website->status,
-                'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('d/m/Y H:i:s'),
+                // 'status_website' => $website->status,
+                // 'day_deploy' => empty($day_deploy_nearest) ? '' : \Carbon\Carbon::parse($day_deploy_nearest)->format('d/m/Y H:i:s'),
             ]);
         }
     }

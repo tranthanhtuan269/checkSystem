@@ -11,14 +11,14 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item @if(!Request::get('type')) active @endif" href="/statistical?web={{ Request::get('web') }}">Hôm nay</a></li>
-                            <li><a class="dropdown-item @if(Request::get('type') == 2) active @endif" href="/statistical?web={{ Request::get('web') }}&type=2">Hôm qua</a></li>
-                            <li><a class="dropdown-item @if(Request::get('type') == 3) active @endif" href="/statistical?web={{ Request::get('web') }}&type=3">Tuần này</a></li>
-                            <li><a class="dropdown-item @if(Request::get('type') == 4) active @endif" href="/statistical?web={{ Request::get('web') }}&type=4">Tuần trước</a></li>
-                            <li><a class="dropdown-item @if(Request::get('type') == 5) active @endif" href="/statistical?web={{ Request::get('web') }}&type=5">Tháng này</a></li>
-                            <li><a class="dropdown-item @if(Request::get('type') == 6) active @endif" href="/statistical?web={{ Request::get('web') }}&type=6">Tháng trước</a></li>
-                            <li><a class="dropdown-item @if(Request::get('type') == 7) active @endif" href="/statistical?web={{ Request::get('web') }}&type=7">Năm nay</a></li>
-                            <li><a class="dropdown-item @if(Request::get('type') == 8) active @endif" href="/statistical?web={{ Request::get('web') }}&type=8">Năm trước</a></li>
+                            <li><a class="dropdown-item @if(!Request::get('type')) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}">Hôm nay</a></li>
+                            <li><a class="dropdown-item @if(Request::get('type') == 2) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}&type=2">Hôm qua</a></li>
+                            <li><a class="dropdown-item @if(Request::get('type') == 3) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}&type=3">Tuần này</a></li>
+                            <li><a class="dropdown-item @if(Request::get('type') == 4) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}&type=4">Tuần trước</a></li>
+                            <li><a class="dropdown-item @if(Request::get('type') == 5) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}&type=5">Tháng này</a></li>
+                            <li><a class="dropdown-item @if(Request::get('type') == 6) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}&type=6">Tháng trước</a></li>
+                            <li><a class="dropdown-item @if(Request::get('type') == 7) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}&type=7">Năm nay</a></li>
+                            <li><a class="dropdown-item @if(Request::get('type') == 8) active @endif" href="/statistical?web={{ Request::get('web') }}&domain={{ Request::get('domain') }}&type=8">Năm trước</a></li>
                             {{-- <li><a class="dropdown-item" href="javascript:void(0)" data-id="9">Tùy chỉnh</a></li> --}}
                         </ul>
                     </label>

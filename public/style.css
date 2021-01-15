@@ -1,6 +1,9 @@
 .list-group-item.active a{
     color: #fff;
 }
+.pagination {
+    justify-content: center;
+ }
 *:focus {
     outline: none !important;
     -webkit-box-shadow: none !important;
