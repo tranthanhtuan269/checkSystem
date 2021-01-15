@@ -24,7 +24,7 @@ class HomeController extends Controller
             
             $day_deploy_nearest = @file_get_contents($website->link . '/get-info-git-pull-nearest');
 
-            if ($day_deploy_nearest == false) {
+            if ($day_deploy_nearest == false || strlen($day_deploy_nearest) > 19) {
                 $day_deploy_nearest = null;
             }
 

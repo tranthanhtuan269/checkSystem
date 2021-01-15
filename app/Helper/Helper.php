@@ -18,7 +18,11 @@ class Helper
         if ($check_server) {
             return true;
         } else {
-            return false;
+            if (@file_get_contents($url)) {
+                return true;;
+            }  else {
+                return;
+            }
         }
     }
 
