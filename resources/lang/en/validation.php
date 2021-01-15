@@ -12,6 +12,7 @@ return [
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
+    'regex_link'  => 'The :attribute is not a valid link.',
     'regex_email'  => 'The :attribute is not a valid email.',
     'accepted' => 'The :attribute must be accepted.',
     'active_url' => 'The :attribute is not a valid URL.',

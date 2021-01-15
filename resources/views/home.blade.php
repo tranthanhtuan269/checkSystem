@@ -423,7 +423,7 @@
                       button: "Đóng",
                     }).then((value) => {
                       $(".ajax_waiting").addClass("loading");
-                      location.reload();
+                      window.location.replace(window.location.origin);
                     });
                     //   $html = '';
                     //   if(obj.status_website == 1){
