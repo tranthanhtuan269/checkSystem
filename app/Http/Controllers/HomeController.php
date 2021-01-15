@@ -146,7 +146,7 @@ class HomeController extends Controller
 
     public function addEmail(Request $request){
         $rules = [
-            'email'          => 'required|max:255|regex_email:"/^[_a-zA-Z0-9-]{2,}+(\.[_a-zA-Z0-9-]{2,}+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,3})$/"|unique:emails,email',
+            'email'          => 'required|max:255|regex_email:"/^[_a-zA-Z0-9-]{2,}+(\+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,3})$/"|unique:emails,email',
         ];
         $messages = [];
         $validator = \Validator::make($request->all(), $rules, $messages);
