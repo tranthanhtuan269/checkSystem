@@ -288,11 +288,16 @@
                   if(obj.status == 200){
                     swal("Tuyệt!", "Website đã được cập nhật!", "success");
                     $('#editModal').modal('toggle')
-                    // $('#day_deploy-' + object_id).html(day_deploy_format)
+                    $('#day_deploy-' + object_id).html(obj.day_deploy)
                     $('#website-' + object_id).text(object_name);
                     $('#website-' + object_id).attr('href', link);
                     $('#website-' + object_id).attr('data-link_admin', link_admin);
 
+                    if (obj.status_website == 0) {
+                      $('#day_deploy-' + object_id).closest('tr').addClass('table-danger').removeClass('table-success')
+                    } else {
+                      $('#day_deploy-' + object_id).closest('tr').addClass('table-success').removeClass('table-danger')
+                    }
 
                     if (link_admin != '') {
                       if (link_admin.indexOf('http') === -1) {
