@@ -224,9 +224,9 @@
                 
         $('#update-btn').click(function(){
           var object_id = $('#update-btn').attr('data-id');
-          var object_name = $('#edtnametxt').val();
-          var link = $('#edtlinktxt').val();
-          var link_admin = $('#edtlinkadmintxt').val();
+          var object_name = $('#edtnametxt').val().trim();
+          var link = $('#edtlinktxt').val().trim();
+          var link_admin = $('#edtlinkadmintxt').val().trim();
           // var day_deploy = $('#edtdaydeploytxt').val();
           $('.alert-error').html('')
 
