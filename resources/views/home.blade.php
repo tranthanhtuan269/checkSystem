@@ -210,7 +210,7 @@
                 
                 request.done(function( msg ) {
                   $(".ajax_waiting").addClass("loading");
-                  location.reload();
+                  window.location.replace(window.location.origin);
                   // self.parent().parent().parent().remove();
                 });
                 
