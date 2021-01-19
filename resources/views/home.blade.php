@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="list-group list-website table-responsive clearfix">
-      <table class="table table-borderless">
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th class="text-center">Tên web</th>

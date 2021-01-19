@@ -38,8 +38,8 @@ class HomeController extends Controller
 
             $medium_view_7_day_nearest = @file_get_contents($website->link . '/get-statistical-7-day-nearest');
 
-            if ($medium_view_7_day_nearest == false) {
-                $medium_view_7_day_nearest = 0;
+            if ($medium_view_7_day_nearest == false || strlen($medium_view_7_day_nearest) > 19) {
+                $medium_view_7_day_nearest = $website->medium_view_7_day_neares;
             }
 
             $website->medium_view_7_day_nearest = $medium_view_7_day_nearest;
