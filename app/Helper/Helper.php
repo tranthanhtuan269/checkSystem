@@ -32,4 +32,5 @@ class Helper
             $message->to($email)->subject($content);
         });
     }
+
 }

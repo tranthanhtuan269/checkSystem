@@ -12,15 +12,22 @@
         <thead>
           <tr>
             <th class="text-center">Tên web</th>
+            <th class="text-center">Ip</th>
+            <th class="text-center">Lượt visit trung bình 7 ngày</th>
             <th class="text-center">Ngày deploy gần nhất</th>
+            <th class="text-center">Trạng thái</th>
             <th class="text-center">Thao tác</th>
           </tr>
         </thead>
         <tbody>
           @foreach($websites as $website)
-            <tr class="{{ $website->status == 1 ? 'table-success' : 'table-danger' }}">
+          {{-- class="{{ $website->status == 1 ? 'table-success' : 'table-danger' }}" --}}
+            <tr>
               <td> <a id="website-{{ $website->id }}" href="{{ $website->link }}" data-link_admin="{{ $website->link_admin }}" data-day_deploy="{{ \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y') }}">{{ $website->name }}</a></td>
+              <td class="text-center">{{ $website->ip }}</td>
+              <td class="text-center">{{ $website->medium_view_7_day_nearest }}</td>
               <td class="text-center" id="day_deploy-{{ $website->id }}">{{ empty($website->day_deploy) ? '' : \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y H:i:s') }}</td>
+              <td class="text-center">{{ $website->status == 1 ? 'Up' : 'Down' }}</td>
               <td class="text-center">
                 <div class="list-group-item-cs item-{{ $website->id }}">
                   @if (!empty($website->link_admin))

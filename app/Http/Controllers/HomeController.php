@@ -28,7 +28,24 @@ class HomeController extends Controller
                 $day_deploy_nearest = null;
             }
 
+            $domain = str_replace("https://","", $website->link);
+            $domain = str_replace("http://","", $website->link);
+            $ip = gethostbyname($domain);
+
+            if ($ip == $domain) {
+                $ip = null;
+            }
+
+            $medium_view_7_day_nearest = @file_get_contents($website->link . '/get-statistical-7-day-nearest');
+
+            if ($medium_view_7_day_nearest == false) {
+                $medium_view_7_day_nearest = 0;
+            }
+
+            $website->medium_view_7_day_nearest = $medium_view_7_day_nearest;
             $website->day_deploy = $day_deploy_nearest;
+            $website->ip = $ip;
+
             $website->save();
         }
         
@@ -73,12 +90,22 @@ class HomeController extends Controller
             // if ($day_deploy_nearest == false) {
             //     $day_deploy_nearest = null;
             // }
-     
+            $domain = str_replace("https://","", $request->link);
+            $domain = str_replace("http://","", $request->link);
+            $domain = str_replace("https","", $request->link);
+            $domain = str_replace("http","", $request->link);
+            $ip = gethostbyname($domain);
+
+            if ($ip == $domain) {
+                $ip = null;
+            }
+
             $website = new Website;
             $website->name = $request->name;
             $website->link = $request->link;
             $website->link_admin = $request->link_admin;
             $website->day_deploy = null;
+            $website->ip = $ip;
             // $website->day_deploy = $day_deploy_nearest;
             // $website->status = Helper::http_response($website->link);
             $website->save();
@@ -128,9 +155,20 @@ class HomeController extends Controller
             // }
 
             if($website){
+                $domain = str_replace("https://","", $request->link);
+                $domain = str_replace("http://","", $request->link);
+                $domain = str_replace("https","", $request->link);
+                $domain = str_replace("http","", $request->link);
+                $ip = gethostbyname($domain);
+    
+                if ($ip == $domain) {
+                    $ip = null;
+                }
+
                 $website->name = $request->name;
                 $website->link = $request->link;
                 $website->link_admin = $request->link_admin;
+                $website->ip = $ip;
                 // $website->day_deploy = $day_deploy_nearest;
                 // $website->status = Helper::http_response($request->link);
                 $website->save();
@@ -245,6 +283,31 @@ class HomeController extends Controller
             return response()->json([
                 'status' => '404',
             ]);
+        }
+    }
+
+    
+    public function updateInfoWeb(){
+        $websites = Website::orderBy('id', 'DESC')->paginate(5);
+
+        foreach($websites as $website){
+            $day_deploy_nearest = @file_get_contents($website->link . '/get-info-git-pull-nearest');
+
+            if ($day_deploy_nearest == false || strlen($day_deploy_nearest) > 19) {
+                $day_deploy_nearest = null;
+            }
+
+            $domain = str_replace("https://","", $website->link);
+            $domain = str_replace("http://","", $website->link);
+            $ip = gethostbyname($domain);
+
+            if ($ip == $domain) {
+                $ip = null;
+            }
+
+            $website->ip = $ip;
+            $website->day_deploy = $day_deploy_nearest;
+            $website->save();
         }
     }
 }
