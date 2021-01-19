@@ -30,6 +30,7 @@ class HomeController extends Controller
 
             $domain = str_replace("https://","", $website->link);
             $domain = str_replace("http://","", $website->link);
+            $domain = str_replace("/","", $website->link);
             $ip = gethostbyname($domain);
 
             if ($ip == $domain) {
