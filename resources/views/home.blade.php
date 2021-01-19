@@ -23,10 +23,12 @@
               <td class="text-center" id="day_deploy-{{ $website->id }}">{{ empty($website->day_deploy) ? '' : \Carbon\Carbon::parse($website->day_deploy)->format('d/m/Y H:i:s') }}</td>
               <td class="text-center">
                 <div class="list-group-item-cs item-{{ $website->id }}">
-                  <a style="color: #fff" class="btn-sm btn btn-info btn-link-admin @if (empty($website->link_admin)) d-none @endif" href="{{ $website->link_admin }}" target="_blank">
-                    <i class="fa fa-adn" aria-hidden="true"></i> Go Admin
-                  </a>
-                  <a style="color: #fff" class="btn-sm btn btn-secondary btn-statistical" href="{{ route('client.show-statistical') }}?web={{ $website->name }}&domain={{ $website->link }}" target="_blank">
+                  @if (!empty($website->link_admin))
+                    <button class="btn-sm btn btn-info btn-link-admin" data-value="{{ $website->link_admin }}">
+                      <i class="fa fa-adn" aria-hidden="true"></i> Go Admin
+                    </button>
+                  @endif
+                  <a class="btn-sm btn btn-secondary" href="{{ route('client.show-statistical') }}?web={{ $website->name }}&domain={{ $website->link }}">
                     <i class="fa fa-area-chart" aria-hidden="true"></i> Thống kê
                   </a>
                   <button type="button" class="btn-sm btn btn-primary edit-btn" data-id="{{ $website->id }}">
@@ -147,8 +149,8 @@
     </div>
 
     <script>
-      $(document).ready(function(){
 
+      $(document).ready(function(){
         // var dateRegex = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-.\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;            Date.prototype.isValidDate = function () {
         //     return this.getTime() === this.getTime();
         // };  
@@ -221,7 +223,45 @@
             });
           })
         }
-                
+
+        $('.btn-statistical, .btn-link-admin').click(function(){
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          var link = $(this).attr('data-value')
+
+          $.ajax({
+              url: "{{ url('/') }}/check-url-isset",
+              method: "POST",
+              data: { 
+                link : link,
+              },
+              beforeSend: function(r, a){
+                  $(".ajax_waiting").addClass("loading");
+              },
+              complete: function() {
+                  $(".ajax_waiting").removeClass("loading");
+              },
+              success: function (obj) {
+                  if(obj.status == 200){
+                    window.location.replace(link);
+                  } else {
+                    swal({
+                      // title: "Good job!",
+                      text: "Link không hợp lệ!",
+                      icon: "error",
+                      button: "Đóng",
+                    });
+                  }
+              },
+              error: function (data) {
+
+              }
+          });
+        });
+        
         $('#update-btn').click(function(){
           var object_id = $('#update-btn').attr('data-id');
           var object_name = $('#edtnametxt').val().trim();
@@ -345,9 +385,9 @@
 
         $('#save-btn').click(function(){
           $('.alert-error').html('')
-          var object_name = $('#nametxt').val();
-          var link = $('#linktxt').val();
-          var link_admin = $('#link_admin').val();
+          var object_name = $('#nametxt').val().trim();
+          var link = $('#linktxt').val().trim();
+          var link_admin = $('#link_admin').val().trim();
           // var day_deploy = $('#createModal .day_deploy').val();
 
           // if (object_name == '') {

@@ -62,10 +62,11 @@ class HomeController extends Controller
             if (strpos($request->link, 'http') === false) {
                 $request->link = 'http://' . $request->link;
             }
-            
+
             if (!empty($request->link_admin) && strpos($request->link_admin, 'http') === false) {
                 $request->link_admin = 'http://' . $request->link_admin;
             }
+
 
             // $day_deploy_nearest = @file_get_contents($request->link . '/get-info-git-pull-nearest');
 
@@ -234,4 +235,16 @@ class HomeController extends Controller
     public function test(){
         dd(Helper::http_response('sadasdsadas.com'));
    }
+
+   public function checkUrlIsset(Request $request){
+        if(Helper::http_response($request->link) == 1){
+            return response()->json([
+                'status' => '200',
+            ]);
+        }else{
+            return response()->json([
+                'status' => '404',
+            ]);
+        }
+    }
 }
