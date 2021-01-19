@@ -29,8 +29,8 @@ class HomeController extends Controller
             }
 
             $domain = str_replace("https://","", $website->link);
-            $domain = str_replace("http://","", $website->link);
-            $domain = str_replace("/","", $website->link);
+            $domain = str_replace("http://","", $domain);
+            $domain = str_replace("/","", $domain);
             $ip = gethostbyname($domain);
 
             if ($ip == $domain) {
@@ -92,9 +92,10 @@ class HomeController extends Controller
             //     $day_deploy_nearest = null;
             // }
             $domain = str_replace("https://","", $request->link);
-            $domain = str_replace("http://","", $request->link);
-            $domain = str_replace("https","", $request->link);
-            $domain = str_replace("http","", $request->link);
+            $domain = str_replace("http://","", $domain);
+            $domain = str_replace("https","", $domain);
+            $domain = str_replace("http","", $domain);
+            $domain = str_replace("/","", $domain);
             $ip = gethostbyname($domain);
 
             if ($ip == $domain) {
@@ -157,9 +158,10 @@ class HomeController extends Controller
 
             if($website){
                 $domain = str_replace("https://","", $request->link);
-                $domain = str_replace("http://","", $request->link);
-                $domain = str_replace("https","", $request->link);
-                $domain = str_replace("http","", $request->link);
+                $domain = str_replace("http://","", $domain);
+                $domain = str_replace("https","", $domain);
+                $domain = str_replace("http","", $domain);
+                $domain = str_replace("/","", $domain);
                 $ip = gethostbyname($domain);
     
                 if ($ip == $domain) {
