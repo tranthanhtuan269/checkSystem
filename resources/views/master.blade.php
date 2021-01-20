@@ -20,7 +20,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid">
     	<div class="row">
     		<div class="col-md-12 text-center my-5">
     			<h1>Hệ thống quản lý website của TOH soft</h1>
