@@ -25,6 +25,7 @@ Route::post('/save-config', 'HomeController@saveConfig');
 Route::get('/emails', 'HomeController@emails');
 Route::get('/test', 'HomeController@test');
 
+
 Route::get('email-test', function(){
   
     $details['email'] = 'tran.thanh.tuan269@gmail.com';

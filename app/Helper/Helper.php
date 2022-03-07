@@ -7,7 +7,10 @@ class Helper
 {
     public static function http_response($url, $status = null, $wait = 3)
     {
-        $time = microtime(true);
+        if(IPChecker::isIPOnline('192.81.132.130')) return 1;
+        return 0;
+        
+        $time = microtime(true); 
         $expire = $time + $wait;
 
         $ch = curl_init();
